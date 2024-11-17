@@ -6,14 +6,14 @@ class "Building" as bl {
     floorsAmount: int
 }
 
-class address{
+class Address {
     state : String
     city : String
     street : String
     numberOfBuilding : int
-
 }
-address "1" --> "1" bl
+
+Address "1" --> "1" bl
 
 class "Floor" as fl {
     floorNumber: int
@@ -32,6 +32,9 @@ class "Documentation" {
 
 class "Device" as de {
     id: Long
+    state: DeviceStatus
+    brand: String
+    model: String
     isActive: bool
     brokenStatus: int
     location: Room
@@ -39,6 +42,15 @@ class "Device" as de {
     powerConsumptionActive: double
     powerConsumptionIdle: double
     powerConsumptionOff: double
+    +turnOn()
+    +turnOff()
+    +notify(object message)
+}
+
+enum "DeviceStatus" as ds {
+    ACTIVE = 1
+    IDLE = 2
+    OFF = 3
 }
 
 class "Sensor" as se {
@@ -52,20 +64,31 @@ class "FireSensor" as fise {
 class "MovingSensor" as mose {
     workOn: List<Creature>
 }
-class "ElectronicDevice" as elde {
-    brand: String
-    model: String
+
+class "MultimediaDevice" as md {
+    +volume: decimal percentage
+    +play()
+    +stop()
+    +setVolume(decimal percentage)
+}
+
+class "Appliance" as ad {
+    +maxCapacity: double liters
+    +currentCapacity: double litres
+    +maxTemperature: double
+    +minTemperature: double
+    +currentTemperature: double
+    +updateCapacity(double capacity)
+    +updateTemperature(double temperature)
+}
+
+class "TV" as tv {
 }
 
 class "Kettle" as ket {
-    capacity: double
-    currentTemperature: double
-    currentCapacity: double
 }
 
 class "Fridge" as frid {
-    capacity: double
-    currentTemperature: double
     contents: HashMap<String, Double>
 }
 
@@ -76,7 +99,7 @@ class "Creature" as cret {
 }
 
 class "Person" as pers {
-    idFamily: int
+    familyId: int
     status: Enum
     occupation: String
     location: String
@@ -147,10 +170,14 @@ fl "1" --* "*" ro : part of <
 
 ro "1" --o "*" de : contains >
 Documentation "1" --> "*" de : have >
+de "1" --> "*" ds : contains >
 
-elde "*" --|> "1" de : is >
-ket "*" --|> "1" elde : is >
-frid "*" --|> "1" elde : is >
+md "*" --|> "1" de : is >
+ad "*" --|> "1" de : is >
+
+tv "*" --|> "1" md : is >
+ket "*" --|> "1" ad : is >
+frid "*" --|> "1" ad : is >
 
 se "*" --|> "1" de : is >
 fise --|> se : is >
