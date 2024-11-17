@@ -1,0 +1,158 @@
+@startuml
+class "Building" as bl {
+    id: Long
+    name: String
+    yearBuilt: int
+    floorsAmount: int
+}
+
+class address{
+    state : String
+    city : String
+    street : String
+    numberOfBuilding : int
+
+}
+address "1" --> "1" bl
+
+class "Floor" as fl {
+    floorNumber: int
+    numRooms: int
+}
+
+class "Room" as ro {
+    id: Long
+    name: String
+}
+
+class "Documentation" {
+    name: String
+    contens: String
+}
+
+class "Device" as de {
+    id: Long
+    isActive: bool
+    brokenStatus: int
+    location: Room
+    Documentation : String
+    powerConsumptionActive: double
+    powerConsumptionIdle: double
+    powerConsumptionOff: double
+}
+
+class "Sensor" as se {
+
+}
+
+class "FireSensor" as fise {
+    sensitivity: double
+}
+
+class "MovingSensor" as mose {
+    workOn: List<Creature>
+}
+class "ElectronicDevice" as elde {
+    brand: String
+    model: String
+}
+
+class "Kettle" as ket {
+    capacity: double
+    currentTemperature: double
+    currentCapacity: double
+}
+
+class "Fridge" as frid {
+    capacity: double
+    currentTemperature: double
+    contents: HashMap<String, Double>
+}
+
+class "Creature" as cret {
+    name: String
+    age: int
+    location: Room
+}
+
+class "Person" as pers {
+    idFamily: int
+    status: Enum
+    occupation: String
+    location: String
+    activities: List<String>
+}
+
+class Family {
+    id: int
+}
+pers --> Family
+
+Enum status {
+    work
+    home
+}
+
+class "Pet" as pet{
+}
+
+class "Cat" as cat {
+}
+
+class "Dog" as dog {
+}
+
+class "HouseConfigurationReport" {
+    reportDate: Date
+    details: String
+}
+
+class "EventReport" {
+    eventDateStart: Date
+    eventDateEnd: Date
+    eventType: String
+    eventDescription: String
+    source: String
+}
+class "ActivityAndUsageReport" {
+    reportDate: Date
+    who: Person
+    details: String
+}
+
+class "ConsumptionReport" {
+    reportDate: Date
+    totalEnergyConsumption: double
+    totalWaterConsumption: double
+    financialSummary: double
+}
+
+HouseConfigurationReport "*" --> "1" bl : generates for >
+EventReport "*" --> "1" de : generates from >
+ActivityAndUsageReport "1" --> "*" cret : tracks >
+ConsumptionReport "*" --> "1" de : analyzes >
+
+cret "*" o-- "1" ro : contains <
+
+pers "*" --|> "1" cret : is >
+pers --> status
+pet "*" --|> "1" cret : is >
+
+cat  --|> pet : is >
+dog --|> pet : is >
+
+bl "1" --* "*" fl : part of <
+
+fl "1" --* "*" ro : part of <
+
+ro "1" --o "*" de : contains >
+Documentation "1" --> "*" de : have >
+
+elde "*" --|> "1" de : is >
+ket "*" --|> "1" elde : is >
+frid "*" --|> "1" elde : is >
+
+se "*" --|> "1" de : is >
+fise --|> se : is >
+mose --|> se : is >
+@enduml
