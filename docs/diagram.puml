@@ -47,6 +47,8 @@ class "Device" as de {
     +notify(object message)
 }
 
+
+
 enum "DeviceStatus" as ds {
     ACTIVE = 1
     IDLE = 2
@@ -66,7 +68,7 @@ class "MovingSensor" as mose {
 }
 
 class "MultimediaDevice" as md {
-    +volume: decimal percentage
+    +volume: int
     +play()
     +stop()
     +setVolume(decimal percentage)
@@ -80,6 +82,7 @@ class "Appliance" as ad {
     +currentTemperature: double
     +updateCapacity(double capacity)
     +updateTemperature(double temperature)
+    addContent(String, double)
 }
 
 class "TV" as tv {
@@ -137,6 +140,8 @@ class "EventReport" {
     eventDescription: String
     source: String
 }
+
+
 class "ActivityAndUsageReport" {
     reportDate: Date
     who: Person
@@ -150,10 +155,13 @@ class "ConsumptionReport" {
     financialSummary: double
 }
 
+class EventDispatcher {}
+
 HouseConfigurationReport "*" --> "1" bl : generates for >
-EventReport "*" --> "1" de : generates from >
+EventReport "*" --> "1" EventDispatcher : generates from >
 ActivityAndUsageReport "1" --> "*" cret : tracks >
-ConsumptionReport "*" --> "1" de : analyzes >
+ConsumptionReport "*" --> "1" EventDispatcher : analyzes >
+de <--> EventDispatcher
 
 cret "*" o-- "1" ro : contains <
 
