@@ -31,6 +31,7 @@ class "Documentation" {
 }
 
 class "Device" as de {
+
     id: Long
     state: DeviceStatus
     brand: String
@@ -47,13 +48,21 @@ class "Device" as de {
     +notify(object message)
 }
 
+class deviceApi {
 
-
-enum "DeviceStatus" as ds {
-    ACTIVE = 1
-    IDLE = 2
-    OFF = 3
 }
+
+class interfaceState{
+
+}
+
+class Active{}
+class Idle{}
+class Off{}
+
+Active --> interfaceState
+Idle --> interfaceState
+Off --> interfaceState
 
 class "Sensor" as se {
 
@@ -161,7 +170,7 @@ HouseConfigurationReport "*" --> "1" bl : generates for >
 EventReport "*" --> "1" EventDispatcher : generates from >
 ActivityAndUsageReport "1" --> "*" cret : tracks >
 ConsumptionReport "*" --> "1" EventDispatcher : analyzes >
-de <--> EventDispatcher
+deviceApi <--> EventDispatcher
 
 cret "*" o-- "1" ro : contains <
 
@@ -176,12 +185,15 @@ bl "1" --* "*" fl : part of <
 
 fl "1" --* "*" ro : part of <
 
-ro "1" --o "*" de : contains >
+de --> deviceApi
+
+ro "1" --o "*" deviceApi : contains >
 Documentation "1" --> "*" de : have >
-de "1" --> "*" ds : contains >
 
 md "*" --|> "1" de : is >
 ad "*" --|> "1" de : is >
+
+interfaceState o-- de
 
 tv "*" --|> "1" md : is >
 ket "*" --|> "1" ad : is >
