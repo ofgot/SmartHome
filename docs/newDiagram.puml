@@ -1,0 +1,269 @@
+@startuml
+
+interface Device {
+    void turnOn();
+    void turnOff();
+
+}
+
+class Computer implements Device {
+    void turnOn();
+    void turnOff();
+
+}
+
+class TV implements Device {
+    void turnOn();
+    void turnOff();
+    void changeChanel();
+    void increaseVolume(int);
+    void decreaseVolume(int);
+
+}
+
+class Fridge implements Device {
+    void turnOn();
+    void turnOff();
+    Product takeProduct(Product);
+    Product loadProduct(Product);
+
+}
+
+class LitterTray implements Device {
+    void turnOn();
+    void turnOff();
+    void cleanPoop()
+
+}
+
+class TemperatureSensor implements Device {
+    - int temperature;
+    - List<Observer> observers
+    addObserver(Observer)
+    removeObserver(Observer)
+    setTemperature(int temperature)
+    notifyObservers()
+
+    void turnOn();
+    void turnOff();
+
+}
+
+abstract class DeviceFactory {
+    Device createDevice();
+}
+
+class MultimediaFactory extends DeviceFactory {
+    Device createDevice(): TV
+    {static} MultimediaFactory getInstance()
+}
+
+class HouseholdAppliancesFactory extends DeviceFactory {
+    Device createDevice(): Fridge, Computer
+    {static} HouseholdAppliancesFactory getInstance()
+}
+
+class ComputerFactory extends HouseholdAppliancesFactory{
+    Device createDevice(): Computer
+    {static} ComputerFactory getInstance()
+}
+
+class FridgeFactory extends HouseholdAppliancesFactory{
+    Device createDevice(): Fridge
+    {static} FridgeFactory getInstance()
+}
+
+class HeatingFactory extends DeviceFactory {
+    Device createDevice(): TemperatureSensor
+    {static} HeatingFactory getInstance()
+}
+
+class HeatingSystem implements Observer{
+   -int temperature
+    update(int temperature)
+'    if temperature is over 20 turn off heating else turn on
+}
+
+interface Observer {
+    void update(int temperature)
+}
+
+interface HouseComponent {
+    void displayInfo()
+
+}
+
+class Room implements HouseComponent {
+    -List<Device> devices
+    -List<Resident> residents
+
+    void displayInfo()
+    void addDevice(Device)
+    void removeDevice(Device)
+    void addResidence(Device)
+    void removeResidence(Device)
+    List<Device> getDevices()
+    List<Resident> getResidents()
+
+}
+
+class Floor implements HouseComponent {
+    -List<HouseComponent> components
+    void addComponent(HouseComponent component)
+    void displayInfo()
+
+}
+
+class Building implements HouseComponent {
+    -List<HouseComponent> components
+    void addComponent(HouseComponent component)
+    void displayInfo()
+
+}
+
+interface DeviceAction {
+    void execute();
+}
+
+class TurnOnDeviceAction implements DeviceAction {
+    -Device device
+    TurnOnDeviceAction(device)
+    void execute()
+}
+
+
+class TurnOffDeviceAction implements DeviceAction {
+    -Device device
+    TurnOffDeviceAction(device)
+    void execute()
+}
+
+class LoadProductAction implements DeviceAction {
+    -Device device
+    -Product product;
+    loadProductAction(device, product);
+    void execute();
+}
+
+class TakeProductAction implements DeviceAction {
+    -Device device
+    -Product product;
+    takeProductAction(device, product);
+    void execute();
+}
+
+class IncreaseVolumeAction implements DeviceAction {
+    -Device device
+    -int amount
+    increaseVolumeAction(device, amount)
+    void execute()
+}
+
+class DecreaseVolumeAction implements DeviceAction {
+    -Device device
+    -int amount
+    decreaseVolumeAction(device, amount)
+    void execute()
+}
+
+class CleanPoopAction implements DeviceAction {
+    -Device device
+    CleanPoopAction(device)
+    void execute()
+}
+
+
+class DeviceController {
+    -DeviceAction action
+    void setAction(DeviceAction action)
+    void executeAction()
+}
+
+class SmartHome {
+
+}
+
+abstract class Resident {
+    InteractionStrategy interactionStrategy;
+    Resident(InteractionStrategy)
+    setInteractionStrategy(InteractionStrategy)
+    interactWithDevice(DeviceController controller, Device device)
+'    public void interactWithDevice(DeviceController controller, Device device) {
+'            interactionStrategy.interact(device);
+'
+'            EventCollector.getInstance().recordEvent(
+'                new ResidentEvent(controller.getActionName, this.name, device.getClass().getSimpleName())
+'            );
+'        }
+
+
+}
+
+class Human extends Resident{
+    public Human()
+
+}
+
+class Animal extends Resident {
+    public Animal()
+
+}
+
+interface InteractionStrategy{
+    void interact(Device)
+}
+
+class HumanInteractionStrategy implements InteractionStrategy{
+    void interact(Device);
+}
+
+class AnimalInteractionStrategy implements InteractionStrategy{
+    void interact(Device)
+}
+
+interface ReportVisitor {
+    void visit(Building)
+    void visit(Floor)
+    void visit(Room)
+    void visit(Device)
+    void visit(Resident)
+}
+
+class HouseConfigurationReport implements ReportVisitor {
+    -StringBuilder reportStringBuilder report
+
+    void visit(Building)
+    void visit(Floor)
+    void visit(Room)
+    void visit(Device)
+    void visit(Resident)
+}
+
+class EventReport implements ReportVisitor {
+    void visit(Device)
+    visit(Resident)
+}
+
+class ActivityAndUsageReport implements ReportVisitor {
+    void visit(Device)
+    void visit(Resident)
+}
+
+class ConsumptionReport implements ReportVisitor {
+    void visit(Device)
+}
+
+interface Event {
+    String getType();
+    String getSource();
+    String getTarget();
+}
+
+
+
+Device <.. DeviceFactory
+TemperatureSensor o-- Observer
+DeviceController --> DeviceAction
+Resident o-- InteractionStrategy
+
+@enduml

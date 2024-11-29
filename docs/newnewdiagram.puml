@@ -1,0 +1,189 @@
+@startuml
+
+interface Device {
+    void turnOn();
+    void turnOff();
+}
+
+class Computer implements Device {
+    void turnOn();
+    void turnOff();
+
+}
+
+class TV implements Device {
+    void turnOn();
+    void turnOff();
+    void changeChanel();
+    void increaseVolume(int);
+    void decreaseVolume(int);
+
+}
+
+class Fridge implements Device {
+    void turnOn();
+    void turnOff();
+    Product takeProduct(Product);
+    Product loadProduct(Product);
+
+}
+
+class LitterTray implements Device {
+    void turnOn();
+    void turnOff();
+    void cleanPoop()
+
+}
+
+class TemperatureSensor implements Device {
+    - int temperature;
+    - List<Observer> observers
+    addObserver(Observer)
+    removeObserver(Observer)
+    setTemperature(int temperature)
+    notifyObservers()
+
+    void turnOn();
+    void turnOff();
+
+}
+
+abstract class DeviceFactory {
+    Device createDevice();
+}
+
+class MultimediaFactory extends DeviceFactory {
+    Device createDevice(): TV
+    {static} MultimediaFactory getInstance()
+}
+
+class HouseholdAppliancesFactory extends DeviceFactory {
+    Device createDevice(): Fridge, Computer
+    {static} HouseholdAppliancesFactory getInstance()
+}
+
+class ComputerFactory extends HouseholdAppliancesFactory{
+    Device createDevice(): Computer
+    {static} ComputerFactory getInstance()
+}
+
+class FridgeFactory extends HouseholdAppliancesFactory{
+    Device createDevice(): Fridge
+    {static} FridgeFactory getInstance()
+}
+
+class HeatingFactory extends DeviceFactory {
+    Device createDevice(): TemperatureSensor
+    {static} HeatingFactory getInstance()
+}
+
+class HeatingSystem implements Observer{
+   -int temperature
+    update()
+'    if temperature is over 20 turn off heating else turn on
+}
+
+interface Observer {
+    void update(int temperature)
+}
+
+interface HouseComponent {
+    void displayInfo()
+
+    void accept(ReportVisitor)
+}
+
+class Room implements HouseComponent {
+    -List<Device> devices
+
+    void displayInfo()
+    void addDevice(Device)
+    void removeDevice(Device)
+    List<Device> getDevices()
+
+}
+
+class Floor implements HouseComponent {
+    -List<HouseComponent> components
+    void addComponent(HouseComponent component)
+    void displayInfo()
+
+}
+
+class Building implements HouseComponent {
+    -List<HouseComponent> components
+    void addComponent(HouseComponent component)
+    void displayInfo()
+
+}
+
+'TurnOffDeviceAction *-- Device
+'TurnOnDeviceAction *-- Device
+
+interface DeviceAction {
+    void execute(Device);
+}
+
+package Command {
+    class TurnOnDeviceAction {
+        TurnOnCommand(Device)
+        void execute(Device)
+    }
+
+    class TurnOffDeviceAction {
+        TurnOffCommand(Device)
+        void execute(Device)
+    }
+
+    class LoadProductAction{
+        -final Product;
+        loadProductAction(Product);
+        void execute(Device);
+    }
+
+    class TakeProductAction{
+        -final Product;
+        takeProductAction(Product);
+        void execute(Device);
+    }
+
+    class IncreaseVolumeAction{
+        -int amount
+        increaseVolumeAction(int)
+        void execute(Device)
+    }
+
+    class DecreaseVolumeAction {
+        -int amount
+        decreaseVolumeAction(int)
+        void execute(Device)
+    }
+
+    class CleanPoopAction{
+        cleanPoopAction(Device)
+        void execute(Device)
+    }
+}
+
+TurnOnDeviceAction ..|> DeviceAction
+TurnOffDeviceAction ..|> DeviceAction
+LoadProductAction ..|> DeviceAction
+TakeProductAction ..|> DeviceAction
+IncreaseVolumeAction ..|> DeviceAction
+DecreaseVolumeAction ..|> DeviceAction
+CleanPoopAction ..|> DeviceAction
+
+class DeviceController {
+    -DeviceAction action
+    void setAction(DeviceAction action)
+    void executeAction(Device)
+}
+
+Command --> Device
+
+
+Device <.. DeviceFactory
+TemperatureSensor o-- Observer
+DeviceController --> DeviceAction
+
+@enduml
