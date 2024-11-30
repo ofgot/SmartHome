@@ -145,6 +145,7 @@ class LoadProductAction implements DeviceAction {
     void execute();
 }
 
+
 class TakeProductAction implements DeviceAction {
     -Device device
     -Product product;
@@ -179,7 +180,7 @@ class DeviceController {
     void executeAction()
 }
 
-class Mediator {
+interface Mediator {
    void registerDevice(String id, Device device);
    void registerResident(String id, Resident resident);
    void registerHouseComponent(String id, HouseComponent component);
@@ -190,25 +191,28 @@ class Mediator {
 class SmartHomeMediator implements Mediator{
     -Map<String, Device> devices;
     -Map<String, Resident> residents;
-    -Map<String, HouseComponent> residents;
+    -Map<String, HouseComponent> houseComponents;
 
     void registerDevice(String id, Device device)
-    registerResident(String id, Resident resident)
+    void registerResident(String id, Resident resident)
+    void registerHouseComponent(String id, HouseComponent component)
+    void performAction(String residentId, String targetId, DeviceAction action)
+    displayHouseInfo(String componentId)
 }
 
+
 abstract class Resident {
-    void interactWithDevice(Mediator mediator, String deviceId, DeviceAction action)
+
 }
 
 class Human extends Resident{
     public Human()
-    void interactWithDevice(Mediator mediator, String deviceId, DeviceAction action)
 }
 
 class Animal extends Resident {
     public Animal()
-    void interactWithDevice(Mediator mediator, String deviceId, DeviceAction action)
 }
+
 
 interface ReportVisitor {
     void visit(Building)
@@ -248,8 +252,15 @@ interface Event {
     String getTarget();
 }
 
+
+
 Device <.. DeviceFactory
 TemperatureSensor o-- Observer
 DeviceController --> DeviceAction
+
+HouseComponent --o SmartHomeMediator
+DeviceController --o SmartHomeMediator
+Resident --o SmartHomeMediator
+
 
 @enduml
