@@ -100,8 +100,8 @@ class Room implements HouseComponent {
     void displayInfo()
     void addDevice(Device)
     void removeDevice(Device)
-    void addResidence(Device)
-    void removeResidence(Device)
+    void addResidence(Resident)
+    void removeResident(Resident)
     List<Device> getDevices()
     List<Resident> getResidents()
 
@@ -179,26 +179,29 @@ class DeviceController {
     void setAction(DeviceAction action)
     void executeAction()
 }
-
-interface Mediator {
-    void interactWithDevice(Resident resident, Device device, DeviceAction action)
-}
-
-class SmartHomeMediator implements Mediator{
-    void interactWithDevice(Resident resident, Device device, DeviceAction action)
-}
+'
+'interface Mediator {
+'    void interactWithDevice(Resident resident, Device device, DeviceAction action)
+'}
+'
+'class SmartHomeMediator implements Mediator{
+'    void interactWithDevice(Resident resident, Device device, DeviceAction action)
+'}
 
 
 abstract class Resident {
-
+    void interactWithDevice(Device device, DeviceAction deviceAction)
 }
 
 class Human extends Resident{
     public Human()
+    void interactWithDevice(Device device, DeviceAction deviceAction)
 }
 
 class Animal extends Resident {
     public Animal()
+    void interactWithDevice(Device device, DeviceAction deviceAction)
+
 }
 
 
@@ -247,8 +250,8 @@ TemperatureSensor o-- Observer
 DeviceController --> DeviceAction
 
 'HouseComponent --o SmartHomeMediator
-DeviceController --o SmartHomeMediator
-Resident --o SmartHomeMediator
+'DeviceController --o SmartHomeMediator
+'Resident --o SmartHomeMediator
 
 
 @enduml
