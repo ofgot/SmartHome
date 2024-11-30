@@ -108,14 +108,14 @@ class Room implements HouseComponent {
 }
 
 class Floor implements HouseComponent {
-    -List<HouseComponent> components
+    -List<Room> rooms
     void addComponent(HouseComponent component)
     void displayInfo()
 
 }
 
 class Building implements HouseComponent {
-    -List<HouseComponent> components
+    -List<Floor> floors
     void addComponent(HouseComponent component)
     void displayInfo()
 
@@ -181,23 +181,11 @@ class DeviceController {
 }
 
 interface Mediator {
-   void registerDevice(String id, Device device);
-   void registerResident(String id, Resident resident);
-   void registerHouseComponent(String id, HouseComponent component);
-   void performAction(String residentId, String targetId, DeviceAction action);
-   void displayHouseInfo(String componentId);
+    void interactWithDevice(Resident resident, Device device, DeviceAction action)
 }
 
 class SmartHomeMediator implements Mediator{
-    -Map<String, Device> devices;
-    -Map<String, Resident> residents;
-    -Map<String, HouseComponent> houseComponents;
-
-    void registerDevice(String id, Device device)
-    void registerResident(String id, Resident resident)
-    void registerHouseComponent(String id, HouseComponent component)
-    void performAction(String residentId, String targetId, DeviceAction action)
-    displayHouseInfo(String componentId)
+    void interactWithDevice(Resident resident, Device device, DeviceAction action)
 }
 
 
@@ -258,7 +246,7 @@ Device <.. DeviceFactory
 TemperatureSensor o-- Observer
 DeviceController --> DeviceAction
 
-HouseComponent --o SmartHomeMediator
+'HouseComponent --o SmartHomeMediator
 DeviceController --o SmartHomeMediator
 Resident --o SmartHomeMediator
 
