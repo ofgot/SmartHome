@@ -179,46 +179,35 @@ class DeviceController {
     void executeAction()
 }
 
-class SmartHome {
+class Mediator {
+   void registerDevice(String id, Device device);
+   void registerResident(String id, Resident resident);
+   void registerHouseComponent(String id, HouseComponent component);
+   void performAction(String residentId, String targetId, DeviceAction action);
+   void displayHouseInfo(String componentId);
+}
 
+class SmartHomeMediator implements Mediator{
+    -Map<String, Device> devices;
+    -Map<String, Resident> residents;
+    -Map<String, HouseComponent> residents;
+
+    void registerDevice(String id, Device device)
+    registerResident(String id, Resident resident)
 }
 
 abstract class Resident {
-    InteractionStrategy interactionStrategy;
-    Resident(InteractionStrategy)
-    setInteractionStrategy(InteractionStrategy)
-    interactWithDevice(DeviceController controller, Device device)
-'    public void interactWithDevice(DeviceController controller, Device device) {
-'            interactionStrategy.interact(device);
-'
-'            EventCollector.getInstance().recordEvent(
-'                new ResidentEvent(controller.getActionName, this.name, device.getClass().getSimpleName())
-'            );
-'        }
-
-
+    void interactWithDevice(Mediator mediator, String deviceId, DeviceAction action)
 }
 
 class Human extends Resident{
     public Human()
-
+    void interactWithDevice(Mediator mediator, String deviceId, DeviceAction action)
 }
 
 class Animal extends Resident {
     public Animal()
-
-}
-
-interface InteractionStrategy{
-    void interact(Device)
-}
-
-class HumanInteractionStrategy implements InteractionStrategy{
-    void interact(Device);
-}
-
-class AnimalInteractionStrategy implements InteractionStrategy{
-    void interact(Device)
+    void interactWithDevice(Mediator mediator, String deviceId, DeviceAction action)
 }
 
 interface ReportVisitor {
@@ -259,11 +248,8 @@ interface Event {
     String getTarget();
 }
 
-
-
 Device <.. DeviceFactory
 TemperatureSensor o-- Observer
 DeviceController --> DeviceAction
-Resident o-- InteractionStrategy
 
 @enduml
