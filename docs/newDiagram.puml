@@ -21,8 +21,18 @@ class Computer implements Device {
 
 }
 
+class Computer implements Device {
+
+    void turnOn();
+    void turnOff();
+
+}
+
 class TV implements Device {
+
     UUID id
+
+
 
     void turnOn();
     void turnOff();
@@ -33,7 +43,9 @@ class TV implements Device {
 }
 
 class Fridge implements Device {
+
     UUID id
+
 
     void turnOn();
     void turnOff();
@@ -43,6 +55,7 @@ class Fridge implements Device {
 }
 
 class LitterTray implements Device {
+
     UUID id
 
     void turnOn();
@@ -52,6 +65,7 @@ class LitterTray implements Device {
 }
 
 class TemperatureSensor implements Device {
+
     UUID id
 
     - int temperature;
@@ -95,10 +109,15 @@ class HeatingFactory extends DeviceFactory {
     {static} HeatingFactory getInstance()
 }
 
+
 class HeatingSystemObserver implements Observer{
    -int temperature
     void update(int temperature)
     void turnOffHeatingSystem()
+
+class HeatingSystem implements Observer{
+   -int temperature
+    update(int temperature)
 '    if temperature is over 20 turn off heating else turn on
 }
 
@@ -106,15 +125,26 @@ interface Observer {
     void update(int temperature)
 }
 
-
 class Room {
     -List<Device> devices
     -List<Resident> residents
+
+interface HouseComponent {
+    void displayInfo()
+
+}
+
+class Room implements HouseComponent {
+    -List<Device> devices
+    -List<Resident> residents
+
+    void displayInfo()
 
     void addDevice(Device)
     void removeDevice(Device)
     void addResidence(Resident)
     void removeResident(Resident)
+
 }
 
 class Floor {
@@ -143,25 +173,63 @@ class LeaveHome implements Action{
 class TurnOnDeviceAction implements Action {
     -Resident actor
     -Device target
+
+    List<Device> getDevices()
+    List<Resident> getResidents()
+
+}
+
+class Floor implements HouseComponent {
+    -List<Room> rooms
+    void addComponent(HouseComponent component)
+    void displayInfo()
+
+}
+
+class Building implements HouseComponent {
+    -List<Floor> floors
+    void addComponent(HouseComponent component)
+    void displayInfo()
+
+}
+
+interface DeviceAction {
+    void execute();
+}
+
+class TurnOnDeviceAction implements DeviceAction {
+    -Device device
+
     TurnOnDeviceAction(device)
     void execute()
 }
 
 
+
 class TurnOffDeviceAction implements Action {
     -Resident actor
     -Device target
+
+class TurnOffDeviceAction implements DeviceAction {
+    -Device device
+
     TurnOffDeviceAction(device)
     void execute()
 }
 
+
 class LoadProductAction implements Action {
     -Resident actor
     -Device target
+
+class LoadProductAction implements DeviceAction {
+    -Device device
+
     -Product product;
     loadProductAction(device, product);
     void execute();
 }
+
 
 class TakeProductAction implements Action {
     -Resident actor
@@ -174,33 +242,54 @@ class TakeProductAction implements Action {
 class CheckTemperature implements Action {
     -Device actor
     -Device target
+
+
+class TakeProductAction implements DeviceAction {
+    -Device device
+
     -Product product;
     takeProductAction(device, product);
     void execute();
 }
 
+
 class IncreaseVolumeAction implements Action {
     -Resident actor
     -Device target
+
+class IncreaseVolumeAction implements DeviceAction {
+    -Device device
+
     -int amount
     increaseVolumeAction(device, amount)
     void execute()
 }
 
+
 class DecreaseVolumeAction implements Action {
     -Resident actor
     -Device target
+
+class DecreaseVolumeAction implements DeviceAction {
+    -Device device
+
     -int amount
     decreaseVolumeAction(device, amount)
     void execute()
 }
 
+
 class CleanPoopAction implements Action {
     -Resident actor
     -Device target
+
+class CleanPoopAction implements DeviceAction {
+    -Device device
+
     CleanPoopAction(device)
     void execute()
 }
+
 
 class Controller implements IController{
     -Action action
@@ -380,5 +469,87 @@ SmartHome --> ActionDTO
 
 Resident o-- Action
 Device o-- Action
+
+
+class DeviceController {
+    -DeviceAction action
+    void setAction(DeviceAction action)
+    void executeAction()
+}
+'
+'interface Mediator {
+'    void interactWithDevice(Resident resident, Device device, DeviceAction action)
+'}
+'
+'class SmartHomeMediator implements Mediator{
+'    void interactWithDevice(Resident resident, Device device, DeviceAction action)
+'}
+
+
+abstract class Resident {
+    void interactWithDevice(Device device, DeviceAction deviceAction)
+}
+
+class Human extends Resident{
+    public Human()
+    void interactWithDevice(Device device, DeviceAction deviceAction)
+}
+
+class Animal extends Resident {
+    public Animal()
+    void interactWithDevice(Device device, DeviceAction deviceAction)
+
+}
+
+
+interface ReportVisitor {
+    void visit(Building)
+    void visit(Floor)
+    void visit(Room)
+    void visit(Device)
+    void visit(Resident)
+}
+
+class HouseConfigurationReport implements ReportVisitor {
+    -StringBuilder reportStringBuilder report
+
+    void visit(Building)
+    void visit(Floor)
+    void visit(Room)
+    void visit(Device)
+    void visit(Resident)
+}
+
+class EventReport implements ReportVisitor {
+    void visit(Device)
+    visit(Resident)
+}
+
+class ActivityAndUsageReport implements ReportVisitor {
+    void visit(Device)
+    void visit(Resident)
+}
+
+class ConsumptionReport implements ReportVisitor {
+    void visit(Device)
+}
+
+interface Event {
+    String getType();
+    String getSource();
+    String getTarget();
+}
+
+
+
+Device <.. DeviceFactory
+TemperatureSensor o-- Observer
+DeviceController --> DeviceAction
+
+'HouseComponent --o SmartHomeMediator
+'DeviceController --o SmartHomeMediator
+'Resident --o SmartHomeMediator
+
+
 
 @enduml
