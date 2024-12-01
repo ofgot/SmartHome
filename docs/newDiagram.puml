@@ -1,18 +1,29 @@
 @startuml
 
 interface Device {
+    UUID id
+    String name
+    DeviceType type
+
     void turnOn();
     void turnOff();
+}
 
+enum DeviceType{
+    TV, Computer, Fridge, LitterTray, TemperatureSensor
 }
 
 class Computer implements Device {
+    UUID id
+
     void turnOn();
     void turnOff();
 
 }
 
 class TV implements Device {
+    UUID id
+
     void turnOn();
     void turnOff();
     void changeChanel();
@@ -22,6 +33,8 @@ class TV implements Device {
 }
 
 class Fridge implements Device {
+    UUID id
+
     void turnOn();
     void turnOff();
     Product takeProduct(Product);
@@ -30,6 +43,8 @@ class Fridge implements Device {
 }
 
 class LitterTray implements Device {
+    UUID id
+
     void turnOn();
     void turnOff();
     void cleanPoop()
@@ -37,6 +52,8 @@ class LitterTray implements Device {
 }
 
 class TemperatureSensor implements Device {
+    UUID id
+
     - int temperature;
     - List<Observer> observers
     addObserver(Observer)
@@ -78,9 +95,10 @@ class HeatingFactory extends DeviceFactory {
     {static} HeatingFactory getInstance()
 }
 
-class HeatingSystem implements Observer{
+class HeatingSystemObserver implements Observer{
    -int temperature
-    update(int temperature)
+    void update(int temperature)
+    void turnOffHeatingSystem()
 '    if temperature is over 20 turn off heating else turn on
 }
 
@@ -88,170 +106,279 @@ interface Observer {
     void update(int temperature)
 }
 
-interface HouseComponent {
-    void displayInfo()
 
-}
-
-class Room implements HouseComponent {
+class Room {
     -List<Device> devices
     -List<Resident> residents
 
-    void displayInfo()
     void addDevice(Device)
     void removeDevice(Device)
     void addResidence(Resident)
     void removeResident(Resident)
-    List<Device> getDevices()
-    List<Resident> getResidents()
-
 }
 
-class Floor implements HouseComponent {
-    -List<Room> rooms
+class Floor {
     void addComponent(HouseComponent component)
-    void displayInfo()
-
 }
 
-class Building implements HouseComponent {
-    -List<Floor> floors
+class Building {
     void addComponent(HouseComponent component)
-    void displayInfo()
-
 }
 
-interface DeviceAction {
+Building --* Floor
+Floor --* Room
+'Device --> Room
+Resident --> Room
+
+interface Action {
     void execute();
 }
 
-class TurnOnDeviceAction implements DeviceAction {
-    -Device device
+class LeaveHome implements Action{
+    -Resident actor
+    LeaveHome(Resident)
+    void execute
+}
+
+class TurnOnDeviceAction implements Action {
+    -Resident actor
+    -Device target
     TurnOnDeviceAction(device)
     void execute()
 }
 
 
-class TurnOffDeviceAction implements DeviceAction {
-    -Device device
+class TurnOffDeviceAction implements Action {
+    -Resident actor
+    -Device target
     TurnOffDeviceAction(device)
     void execute()
 }
 
-class LoadProductAction implements DeviceAction {
-    -Device device
+class LoadProductAction implements Action {
+    -Resident actor
+    -Device target
     -Product product;
     loadProductAction(device, product);
     void execute();
 }
 
-
-class TakeProductAction implements DeviceAction {
-    -Device device
+class TakeProductAction implements Action {
+    -Resident actor
+    -Device target
     -Product product;
     takeProductAction(device, product);
     void execute();
 }
 
-class IncreaseVolumeAction implements DeviceAction {
-    -Device device
+class CheckTemperature implements Action {
+    -Device actor
+    -Device target
+    -Product product;
+    takeProductAction(device, product);
+    void execute();
+}
+
+class IncreaseVolumeAction implements Action {
+    -Resident actor
+    -Device target
     -int amount
     increaseVolumeAction(device, amount)
     void execute()
 }
 
-class DecreaseVolumeAction implements DeviceAction {
-    -Device device
+class DecreaseVolumeAction implements Action {
+    -Resident actor
+    -Device target
     -int amount
     decreaseVolumeAction(device, amount)
     void execute()
 }
 
-class CleanPoopAction implements DeviceAction {
-    -Device device
+class CleanPoopAction implements Action {
+    -Resident actor
+    -Device target
     CleanPoopAction(device)
     void execute()
 }
 
-
-class DeviceController {
-    -DeviceAction action
-    void setAction(DeviceAction action)
+class Controller implements IController{
+    -Action action
+    void setAction(ActionDTO)
     void executeAction()
 }
-'
-'interface Mediator {
-'    void interactWithDevice(Resident resident, Device device, DeviceAction action)
-'}
-'
-'class SmartHomeMediator implements Mediator{
-'    void interactWithDevice(Resident resident, Device device, DeviceAction action)
-'}
-
 
 abstract class Resident {
-    void interactWithDevice(Device device, DeviceAction deviceAction)
+    UUID id;
+    String name
+    ResidentType type
 }
 
+enum ResidentType {
+    Human, Cat
+}
+
+Resident --> ResidentType
+
 class Human extends Resident{
+    UUID id;
+    String name
     public Human()
-    void interactWithDevice(Device device, DeviceAction deviceAction)
 }
 
 class Animal extends Resident {
+    UUID id;
+    String name
     public Animal()
-    void interactWithDevice(Device device, DeviceAction deviceAction)
+}
 
+class SmartHome{
+    -ReportBuilder builder
+    SmartHome()
+    -void start(List<ActionDTO>)
+    -List<ActionDTO> parseActionFile()
+    void startSimulation()
+    void initialize(InitializationDTO initDTO)
+}
+
+SmartHome --o ReportBuilder
+
+class ActionDTO {
+    List<ActionDTORecord> records
+}
+
+class ActionDTORecord {
+    UUID actionId
+    UUID targetId
+    UUID actorId
+    String payload
+}
+
+ActionDTO --* ActionDTORecord
+
+class ReportBuilder {
+    EventReport eventReport
+    ActivityAndUsageReport activityAndUsageReport
+    ConsumptionReport consumptionReport
+
+    'generates classes inside yourself
+    ReportBuilder()
+
+    EventReport generateEventReport(Action action)
+    ActivityAndUsageReport generateActivityAndUsageReport()
+    HouseConfigurationReport generateHouseConfigurationReport(InitializationDTOBuilding)
+    ConsumptionReport generateConsumptionReport()
+}
+
+ReportBuilder --o EventReport
+ReportBuilder --o ActivityAndUsageReport
+ReportBuilder --o HouseConfigurationReport
+ReportBuilder --o ConsumptionReport
+
+class InitializationDTO {
+    List<InitializationDTOBuilding> buildings
+}
+
+class InitializationDTOBuilding {
+    UUID id
+    List<InitializationDTOFloor> floors
+}
+
+class InitializationDTOFloor {
+    UUID id
+    List<InitializationDTORoom> rooms
+}
+
+class InitializationDTORoom {
+    UUID id
+    List<Resident> residents
+    List<Device> devices
+}
+
+SmartHome --> InitializationDTO
+InitializationDTO --* InitializationDTOBuilding
+InitializationDTOBuilding --* InitializationDTOFloor
+InitializationDTOFloor --* InitializationDTORoom
+
+class HouseConfigurationReport {
+    List<HouseConfigurationReportBuilding> buildings
+}
+
+class HouseConfigurationReportBuilding {
+    UUID id
+    List<HouseConfigurationReportFloor> floors
+    List<Resident> residents
+}
+
+class HouseConfigurationReportFloor {
+    UUID id
+    List<HouseConfigurationReportRoom> rooms
+}
+
+class HouseConfigurationReportRoom {
+    UUID id
+    List<Device> devices
+    List<Resident> residents
 }
 
 
-interface ReportVisitor {
-    void visit(Building)
-    void visit(Floor)
-    void visit(Room)
-    void visit(Device)
-    void visit(Resident)
+
+class EventReport {
+    HashMap<int actionId, int amount> actionTypeGroup
+    HashMap<int deviceId, int amount> DeviceIdGroup
 }
 
-class HouseConfigurationReport implements ReportVisitor {
-    -StringBuilder reportStringBuilder report
-
-    void visit(Building)
-    void visit(Floor)
-    void visit(Room)
-    void visit(Device)
-    void visit(Resident)
+class ActivityAndUsageReport {
+    HashMap<int personId, int amount> PersonIdGroup
 }
 
-class EventReport implements ReportVisitor {
-    void visit(Device)
-    visit(Resident)
+class ConsumptionReport {
+    HashMap<int deviceId, DeviceConsumption consumption> PersonIdGroup
 }
 
-class ActivityAndUsageReport implements ReportVisitor {
-    void visit(Device)
-    void visit(Resident)
+class DeviceConsumption {
+    int electricConsumption
 }
 
-class ConsumptionReport implements ReportVisitor {
-    void visit(Device)
+interface IController {
+    void setAction(ActionDTO)
 }
 
-interface Event {
-    String getType();
-    String getSource();
-    String getTarget();
+SmartHome --> ReportActionProxy
+ReportActionProxy --> Controller
+
+
+class ReportActionProxy implements IController {
+    void setAction(ActionDTO)
+    -void send()
 }
 
 
+
+DeviceConsumption *-- ConsumptionReport
+
+HouseConfigurationReportBuilding *-- HouseConfigurationReport
+HouseConfigurationReportFloor *-- HouseConfigurationReportBuilding
+HouseConfigurationReportRoom *-- HouseConfigurationReportFloor
+'HouseConfigurationReportBuilding --o Resident
+'HouseConfigurationReportRoom --o Device
 
 Device <.. DeviceFactory
+'Device --> Action
 TemperatureSensor o-- Observer
-DeviceController --> DeviceAction
+Controller --> Action
+
 
 'HouseComponent --o SmartHomeMediator
-'DeviceController --o SmartHomeMediator
+'Controller --o SmartHomeMediator
 'Resident --o SmartHomeMediator
 
+ReportActionProxy --> ReportBuilder
+
+SmartHome --> ActionDTO
+'SmartHome --> BuildingDTO
+
+Resident o-- Action
+Device o-- Action
 
 @enduml
