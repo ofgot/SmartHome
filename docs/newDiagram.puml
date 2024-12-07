@@ -449,23 +449,15 @@ DeviceConsumption *-- ConsumptionReport
 HouseConfigurationReportBuilding *-- HouseConfigurationReport
 HouseConfigurationReportFloor *-- HouseConfigurationReportBuilding
 HouseConfigurationReportRoom *-- HouseConfigurationReportFloor
-'HouseConfigurationReportBuilding --o Resident
-'HouseConfigurationReportRoom --o Device
 
 Device <.. DeviceFactory
-'Device --> Action
 TemperatureSensor o-- Observer
 Controller --> Action
 
 
-'HouseComponent --o SmartHomeMediator
-'Controller --o SmartHomeMediator
-'Resident --o SmartHomeMediator
-
 ReportActionProxy --> ReportBuilder
 
 SmartHome --> ActionDTO
-'SmartHome --> BuildingDTO
 
 Resident o-- Action
 Device o-- Action
