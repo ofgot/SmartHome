@@ -157,7 +157,7 @@ Floor *-- Room
 Room o-- Device
 Resident --o Room
 
-SmartHome --> Building
+HouseConfigurationReport --> Building
 
 'Command
 
@@ -310,7 +310,7 @@ class ReportGenerator {
 
 
 DeviceApi o-- ReportGenerator
-'SmartHome --> DeviceApi
+'SmartHome --> Building
 
 class Event {
     String residentAndDevice
