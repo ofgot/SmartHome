@@ -2,18 +2,24 @@ package sir.smarthome.factories;
 
 import sir.smarthome.devices.Device;
 
-public class HouseholdAppliancesFactory extends DeviceFactory {
+import java.lang.reflect.Type;
+
+public abstract class HouseholdAppliancesFactory extends DeviceFactory {
     private static HouseholdAppliancesFactory instance;
 
-    public static HouseholdAppliancesFactory getInstance() {
-        if (instance == null) {
-            instance = new HouseholdAppliancesFactory();
-        }
-        return instance;
-    }
-
-    @Override
-    public Device createDevice() {
-        throw new UnsupportedOperationException("Not supported yet."); // Make abstract factory
+    public abstract HouseholdAppliancesFactory getInstance();
+    
+    public Device createDevice(String type) {
+        return switch (type) {
+            case "fridge" -> {
+                DeviceFactory factory = new FridgeFactory();
+                yield factory.createDevice();
+            }
+            case "computer" -> {
+                DeviceFactory factory1 = new ComputerFactory();
+                yield factory1.createDevice();
+            }
+            default -> throw new RuntimeException("Unsupported device type: " + type);
+        };
     }
 }

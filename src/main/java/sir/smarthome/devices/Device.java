@@ -9,6 +9,8 @@ public interface Device {
     int getUsageDuration();
     Date getLastTurnOn();
 
+    int getTemperature();
+
     void turnOn();
     void turnOff();
     double getUsageConsumption();

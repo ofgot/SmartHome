@@ -6,8 +6,6 @@ import sir.smarthome.devices.Device;
 public class ComputerFactory extends HouseholdAppliancesFactory {
     private static ComputerFactory instance;
 
-    private ComputerFactory() {}
-
     public static ComputerFactory getInstance() {
         if (instance == null) {
             instance = new ComputerFactory();
