@@ -2,8 +2,7 @@ package sir.smarthome.devices;
 
 import java.util.*;
 
-public class Computer implements Device 
-{
+public class Computer implements Device {
     private UUID id;
     private String name;
     private double powerConsumption;

@@ -52,7 +52,6 @@ class Fridge implements Device {
 
 }
 
-
 class TemperatureSensor implements Device {
     UUID id
     double powerConsumption

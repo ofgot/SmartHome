@@ -8,7 +8,6 @@ import sir.smarthome.factories.SensorFactory;
 
 @SpringBootApplication
 public class SmartHomeApplication {
-
     public static void main(String[] args) {
 
         DeviceFactory computerFactory = SensorFactory.getInstance();
@@ -22,5 +21,4 @@ public class SmartHomeApplication {
         
         SpringApplication.run(SmartHomeApplication.class, args);
     }
-
 }
