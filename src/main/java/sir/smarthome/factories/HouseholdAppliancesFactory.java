@@ -6,8 +6,6 @@ import java.lang.reflect.Type;
 
 public abstract class HouseholdAppliancesFactory extends DeviceFactory {
     private static HouseholdAppliancesFactory instance;
-
-    public abstract HouseholdAppliancesFactory getInstance();
     
     public Device createDevice(String type) {
         return switch (type) {
