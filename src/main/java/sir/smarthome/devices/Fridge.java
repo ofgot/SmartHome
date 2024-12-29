@@ -1,5 +1,7 @@
 package sir.smarthome.devices;
 
+import sir.smarthome.common.Product;
+
 import java.util.*;
 
 public class Fridge implements Device {
