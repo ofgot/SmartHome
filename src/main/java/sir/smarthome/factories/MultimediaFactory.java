@@ -4,7 +4,7 @@ import sir.smarthome.devices.*;
 
 public class MultimediaFactory extends DeviceFactory {
     private static MultimediaFactory instance;
-
+    
     private MultimediaFactory() {}
 
     public static MultimediaFactory getInstance() {

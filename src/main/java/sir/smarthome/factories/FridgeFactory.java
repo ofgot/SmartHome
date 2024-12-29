@@ -5,6 +5,8 @@ import sir.smarthome.devices.Fridge;
 
 public class FridgeFactory extends HouseholdAppliancesFactory {
     private static FridgeFactory instance;
+    
+    private FridgeFactory() {}
 
     public static FridgeFactory getInstance() {
         if (instance == null) {
@@ -14,7 +16,7 @@ public class FridgeFactory extends HouseholdAppliancesFactory {
     }
 
     @Override
-    public Device createDevice() { // add inputs
+    public Device createDevice() {
         return new Fridge("Double Door Fridge", 120.0);
     }
 }

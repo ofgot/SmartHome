@@ -3,14 +3,14 @@ package sir.smarthome.factories;
 import sir.smarthome.devices.Device;
 import sir.smarthome.devices.TemperatureSensor;
 
-public class HeatingFactory extends DeviceFactory {
-    private static HeatingFactory instance;
+public class SensorFactory extends DeviceFactory {
+    private static SensorFactory instance;
+    
+    private SensorFactory() {}
 
-    private HeatingFactory() {}
-
-    public static HeatingFactory getInstance() {
+    public static SensorFactory getInstance() {
         if (instance == null) {
-            instance = new HeatingFactory();
+            instance = new SensorFactory();
         }
         return instance;
     }
