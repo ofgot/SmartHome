@@ -43,6 +43,11 @@ public class Fridge implements Device {
         return lastTurnOn;
     }
 
+    @Override
+    public int getTemperature() {
+        return 0;
+    }
+
     public Product takeProduct(Product product) {
         System.out.println("Product " + product.getName() + " taken from fridge.");
         return product;

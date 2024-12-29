@@ -52,7 +52,6 @@ public class TemperatureSensor implements Device {
         return temperature;
     }
     
-    @Override
     public List<Observer> getObservers()
     {
         return observers;
