@@ -1,5 +1,7 @@
 package sir.smarthome.devices;
 
+import sir.smarthome.observers.Observer;
+
 import java.util.*;
 
 public class TemperatureSensor implements Device {
@@ -42,6 +44,18 @@ public class TemperatureSensor implements Device {
     @Override
     public Date getLastTurnOn() {
         return lastTurnOn;
+    }
+    
+    @Override
+    public int getTemperature()
+    {
+        return temperature;
+    }
+    
+    @Override
+    public List<Observer> getObservers()
+    {
+        return observers;
     }
 
     public void addObserver(Observer observer) {
