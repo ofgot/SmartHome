@@ -1,5 +1,6 @@
 package sir.smarthome.factories;
 
+
 import sir.smarthome.devices.Device;
 
 public abstract class DeviceFactory {

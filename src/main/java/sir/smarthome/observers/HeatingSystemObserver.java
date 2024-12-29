@@ -6,7 +6,7 @@ public class HeatingSystemObserver implements Observer {
     @Override
     public void update(int temperature) {
         this.temperature = temperature;
-        if (temperature > 20) { //TODO: make dynamic
+        if (this.temperature > 25) {
             turnOffHeatingSystem();
         } else {
             System.out.println("Heating system is on.");

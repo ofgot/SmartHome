@@ -46,7 +46,6 @@ public class TemperatureSensor implements Device {
         return lastTurnOn;
     }
     
-    @Override
     public int getTemperature()
     {
         return temperature;

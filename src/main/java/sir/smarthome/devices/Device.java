@@ -8,9 +8,6 @@ public interface Device {
     double getPowerConsumption();
     int getUsageDuration();
     Date getLastTurnOn();
-
-    int getTemperature();
-
     void turnOn();
     void turnOff();
     double getUsageConsumption();

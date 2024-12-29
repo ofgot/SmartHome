@@ -188,7 +188,7 @@ class LoadProductAction implements Command {
     -Resident executor
     loadProductAction(device, product);
     void execute();
-    String toString()
+    String toString()    HashMap<int personId, int amount> PersonIdGroup
 }
 
 class TakeProductAction implements Command {
