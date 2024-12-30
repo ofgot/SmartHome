@@ -38,5 +38,4 @@ public class Building implements HouseComponent {
             floor.appendReport(report);
         }
     }
-
 }
