@@ -17,7 +17,7 @@ public class FridgeFactory extends HouseholdAppliancesFactory {
 
     @Override
     public Device createDevice() {
-        return new Fridge("Double Door Fridge", 120.0);
+        return new Fridge("Fridge", 120.0);
     }
 }
 

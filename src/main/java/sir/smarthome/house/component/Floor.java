@@ -33,6 +33,7 @@ public class Floor implements HouseComponent {
 
     @Override
     public void appendReport(StringBuilder report) {
+        report.append("==========================\n");
         report.append("Floor: ").append(name).append("\n");
         for (HouseComponent room : rooms) {
             room.appendReport(report);
