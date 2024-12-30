@@ -8,12 +8,14 @@ public class Computer implements Device {
     private final double powerConsumption;
     private int usageDuration;
     private Date lastTurnOn;
+    private int condition;
 
     public Computer(String name, double powerConsumption) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.powerConsumption = powerConsumption;
         this.usageDuration = 0;
+        this.condition = 100;
     }
 
     @Override
@@ -54,5 +56,10 @@ public class Computer implements Device {
     @Override
     public double getUsageConsumption() {
         return usageDuration * powerConsumption;
+    }
+
+    @Override
+    public int getCondition() {
+        return this.condition;
     }
 }

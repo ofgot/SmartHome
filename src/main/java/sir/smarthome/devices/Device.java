@@ -11,4 +11,5 @@ public interface Device {
     void turnOn();
     void turnOff();
     double getUsageConsumption();
+    int getCondition();
 }
