@@ -2,15 +2,24 @@ package sir.smarthome;
 
 import sir.smarthome.common.Equipment;
 import sir.smarthome.devices.Device;
+import sir.smarthome.devices.Fridge;
 import sir.smarthome.factories.*;
 import sir.smarthome.house.component.Building;
 import sir.smarthome.house.component.Floor;
 import sir.smarthome.house.component.Room;
+import sir.smarthome.reports.HouseConfigurationReport;
 import sir.smarthome.residents.Animal;
 import sir.smarthome.residents.Human;
 
 public class SmartHomeApplication {
-    public void firstConfig(){
+    HouseConfigurationReport houseConfigurationReport;
+
+    public void run(){
+        houseConfigurationReport = new HouseConfigurationReport(secondConfig());
+        System.out.println(houseConfigurationReport.generateReport());
+    }
+
+    public Building firstConfig(){
         // Residents
         // HUMAN
         Human perdelko = new Human("Perdelko"); // cooker
@@ -30,8 +39,9 @@ public class SmartHomeApplication {
         Animal cat7 = new Animal("Fattik");
 
         // Equipments
-        // Skis
-        Equipment ski1 = new Equipment("Ski 1");
+        // ScratchingPost
+        Equipment scratchingPost = new Equipment("Scratching post");
+
         // Bicycles
         Equipment bike1 = new Equipment("Bike 1");
         Equipment bike2 = new Equipment("Bike 2");
@@ -41,30 +51,37 @@ public class SmartHomeApplication {
         DeviceFactory multimediaFactory = MultimediaFactory.getInstance();
         DeviceFactory sensorFactory = SensorFactory.getInstance();
         DeviceFactory computerFactory = ComputerFactory.getInstance();
+        DeviceFactory stoveFactory = StoveFactory.getInstance();
 
         // TV
-        Device tv1 = multimediaFactory.createDevice(1);
-        Device tv2 = multimediaFactory.createDevice(2);
+        Device tv1 = multimediaFactory.createDevice(1, "TV1");
+        Device tv2 = multimediaFactory.createDevice(2,"TV2");
+        Device tv3 = multimediaFactory.createDevice(2,"TV3");
+        Device tv4 = multimediaFactory.createDevice(2,"TV4");
 
         // Fridge
-        Device fridge1 = fridgeFactory.createDevice(2);
-        Device fridge2 = fridgeFactory.createDevice(3);
-        Device fridge3 = fridgeFactory.createDevice(1);
-        Device fridge4 = fridgeFactory.createDevice(1);
+        Device fridge1 = fridgeFactory.createDevice(2, "Fridge1");
+        Device fridge2 = fridgeFactory.createDevice(3, "Fridge2");
+        Device fridge3 = fridgeFactory.createDevice(1, "Fridge3");
+        Device fridge4 = fridgeFactory.createDevice(2, "Fridge4");
+        Device fridge5 = fridgeFactory.createDevice(2, "Fridge5");
+        Device fridge6 = fridgeFactory.createDevice(1, "Fridge6");
 
         // Temperature Sensor
-        Device temperatureKitchen = sensorFactory.createDevice(0.1);
-        Device temperatureLivingRoom1 = sensorFactory.createDevice(0.1);
-        Device temperatureLivingRoom2 = sensorFactory.createDevice(0.1);
-        Device temperatureLivingRoom3 = sensorFactory.createDevice(0.1);
-        Device temperatureAdministration = sensorFactory.createDevice(0.1);
+        Device temperatureKitchen = sensorFactory.createDevice(0.1, "Temperature sensor Kitchen");
+        Device temperatureLivingRoom1 = sensorFactory.createDevice(0.1, "Temperature sensor livingRoom1");
+        Device temperatureLivingRoom2 = sensorFactory.createDevice(0.1, "Temperature sensor livingRoom2");
+        Device temperatureLivingRoom3 = sensorFactory.createDevice(0.1, "Temperature sensor livingRoom3");
+        Device temperatureAdministration = sensorFactory.createDevice(0.1, "Temperature sensor administration");
 
         // Computer
-        Device computer1 = computerFactory.createDevice(2);
-        Device computer2 = computerFactory.createDevice(1);
+        Device computer1 = computerFactory.createDevice(2, "Computer1");
+        Device computer2 = computerFactory.createDevice(1, "Computer2");
 
         // Stove
-
+        Device stove1 = stoveFactory.createDevice(3, "Stove1");
+        Device stove2 = stoveFactory.createDevice(3, "Stove2");
+        Device stove3 = stoveFactory.createDevice(3, "Stove3");
 
         // Building
         Building restaurant = new Building("Cat Cafe");
@@ -81,24 +98,79 @@ public class SmartHomeApplication {
         Room toiletMan = new Room("Room 6");
         Room administration = new Room("Room 7");
         Room changeRoom = new Room("Room 8");
+        Room storeRoom = new Room("Room 9");
+
+        // other
+        restaurant.addComponent(floor1);
+
+        floor1.addComponent(kitchen);
+        floor1.addComponent(livingRoom1);
+        floor1.addComponent(livingRoom2);
+        floor1.addComponent(livingRoom3);
+        floor1.addComponent(administration);
+        floor1.addComponent(changeRoom);
+        floor1.addComponent(toiletWoman);
+        floor1.addComponent(toiletMan);
+        floor1.addComponent(storeRoom);
+
+        kitchen.addDevice(fridge1);
+        kitchen.addDevice(fridge2);
+        kitchen.addDevice(fridge3);
+        kitchen.addDevice(fridge4);
+        kitchen.addDevice(fridge5);
+        kitchen.addDevice(fridge6);
+        kitchen.addDevice(temperatureKitchen);
+        kitchen.addDevice(stove1);
+        kitchen.addDevice(stove2);
+        kitchen.addDevice(stove3);
+        kitchen.addResident(perdelko);
+        kitchen.addResident(pepa);
+
+        livingRoom1.addDevice(temperatureLivingRoom1);
+        livingRoom1.addDevice(tv1);
+        livingRoom1.addDevice(tv2);
+        livingRoom1.addResident(cat1);
+        livingRoom1.addResident(cat2);
+        livingRoom1.addResident(cat3);
+        livingRoom1.addResident(trpaslik);
+        livingRoom1.addResident(permonik);
+
+        livingRoom2.addDevice(temperatureLivingRoom2);
+        livingRoom2.addDevice(tv3);
+        livingRoom2.addResident(cat4);
+        livingRoom2.addResident(cat5);
+
+        livingRoom3.addDevice(temperatureLivingRoom3);
+        livingRoom3.addDevice(tv4);
+        livingRoom3.addResident(cat6);
+        livingRoom3.addResident(cat7);
+
+        administration.addDevice(computer1);
+        administration.addDevice(computer2);
+        administration.addDevice(temperatureAdministration);
+        administration.addResident(dasa);
+        administration.addResident(tim);
+
+        storeRoom.addEquipment(scratchingPost);
+        storeRoom.addEquipment(bike1);
+        storeRoom.addEquipment(bike2);
+
+        return restaurant;
     }
 
-    public void secondConfig(){
+    public Building secondConfig(){
         // Residents
         // HUMAN
-        Human human1 = new Human("George");
-        Human human2 = new Human("Lily");
-        Human human3 = new Human("Oscar");
-        Human human4 = new Human("Mia");
-        Human human5 = new Human("Max");
-        Human human6 = new Human("Sophia");
+        Human george = new Human("George"); // Father
+        Human lily = new Human("Lily");   // Mother
+        Human oscar = new Human("Oscar");  // Son
+        Human mia = new Human("Mia");    // Daughter
+        Human max = new Human("Max");    // Son
+        Human sophia = new Human("Sophia"); // Daughter
 
         // ANIMALS
         Animal hamster = new Animal("Squeaky McSqueakface");
         Animal parrot = new Animal("Sir Tweets-a-Lot");
-        Animal turtle = new Animal("Shelldon");
-        Animal guineaPig = new Animal("Pignut");
-        Animal fish = new Animal("Finn McCool");
 
         // Skis
         Equipment ski1 = new Equipment("Ski 1");
@@ -107,20 +179,131 @@ public class SmartHomeApplication {
         Equipment bike2 = new Equipment("Bike 2");
 
         // Types ...
+        DeviceFactory fridgeFactory = FridgeFactory.getInstance();
+        DeviceFactory multimediaFactory = MultimediaFactory.getInstance();
+        DeviceFactory sensorFactory = SensorFactory.getInstance();
+        DeviceFactory computerFactory = ComputerFactory.getInstance();
+        DeviceFactory stoveFactory = StoveFactory.getInstance();
+
         // TV
+        Device tv1 = multimediaFactory.createDevice(1, "TV1");
+        Device tv2 = multimediaFactory.createDevice(2,"TV2");
+        Device tv3 = multimediaFactory.createDevice(1,"TV3");
+        Device tv4 = multimediaFactory.createDevice(2,"TV4");
+        Device tv5 = multimediaFactory.createDevice(1,"TV5");
+        Device tv6 = multimediaFactory.createDevice(2,"TV6");
 
         // Fridge
+        Device fridge1 = fridgeFactory.createDevice(2, "Fridge1");
+        Device fridge2 = fridgeFactory.createDevice(3, "Fridge2");
+        Device stove1 = stoveFactory.createDevice(4, "Stove1");
+        Device stove2 = stoveFactory.createDevice(4, "Stove2");
 
         // Temperature Sensor
+        Device temperatureKitchen = sensorFactory.createDevice(0.1, "Temperature sensor Kitchen");
+        Device temperatureLivingRoom = sensorFactory.createDevice(0.1, "Temperature sensor livingRoom");
+        Device temperatureDinningRoom = sensorFactory.createDevice(0.1, "Dinning room");
+        Device temperatureParents = sensorFactory.createDevice(0.1, "Temperature sensor parents room");
+        Device temperatureOscar = sensorFactory.createDevice(0.1, "Temperature sensor Oscar room");
+        Device temperatureMia = sensorFactory.createDevice(0.1, "Temperature sensor Mia room");
+        Device temperatureMax = sensorFactory.createDevice(0.1, "Temperature sensor Max room");
+        Device temperatureSophia = sensorFactory.createDevice(0.1, "Temperature sensor Sophia room");
+        Device temperatureOffice = sensorFactory.createDevice(0.1, "Temperature sensor office");
 
         // Computer
+        Device computerFather = computerFactory.createDevice(5, "Computer Father");
+        Device computerMother = computerFactory.createDevice(7, "Computer Mother");
+        Device computerOscar = computerFactory.createDevice(4, "Computer Oscar");
+        Device computerMia = computerFactory.createDevice(4, "Computer Mia");
+        Device computerMax = computerFactory.createDevice(4, "Computer Max");
+        Device computerSophia = computerFactory.createDevice(4, "Computer Sophia");
 
         // Building
+        Building stalinHouse = new Building("Stalin's House");
 
         // Floor
+        Floor floor1 = new Floor("Floor 1");
+        Floor floor2 = new Floor("Floor 2");
 
         // Rooms
+        Room kitchen = new Room("Kitchen");
+        Room livingRoom1 = new Room("Living Room");
+        Room dinningRoom = new Room("Dinning Room");
+        Room parentsBedRoom = new Room("Parents Bed Room");
+        Room oscarBedRoom = new Room("Oscar Bed Room");
+        Room miaBedRoom = new Room("Mia Bed Room");
+        Room maxBedRoom = new Room("Max Bed Room");
+        Room sophiaBedRoom = new Room("Sophia Bed Room");
+        Room toilet1 = new Room("Toilet 1");
+        Room toilet2 = new Room("Toilet 2");
+        Room toilet3 = new Room("Toilet 3");
+        Room office = new Room("Office");
+        Room store = new Room("Store");
 
+        // other
+        stalinHouse.addComponent(floor1);
+        stalinHouse.addComponent(floor2);
 
+        floor1.addComponent(kitchen);
+        floor1.addComponent(livingRoom1);
+        floor1.addComponent(toilet1);
+        floor1.addComponent(office);
+        floor2.addComponent(store);
+
+        floor2.addComponent(parentsBedRoom);
+        floor2.addComponent(oscarBedRoom);
+        floor2.addComponent(miaBedRoom);
+        floor2.addComponent(maxBedRoom);
+        floor2.addComponent(sophiaBedRoom);
+        floor2.addComponent(toilet2);
+        floor2.addComponent(toilet3);
+
+        store.addEquipment(bike1);
+        store.addEquipment(bike2);
+        store.addEquipment(ski1);
+
+        kitchen.addDevice(stove1);
+        kitchen.addDevice(stove2);
+        kitchen.addDevice(temperatureKitchen);
+        kitchen.addDevice(fridge1);
+        kitchen.addDevice(fridge2);
+        kitchen.addDevice(tv1);
+
+        livingRoom1.addDevice(temperatureLivingRoom);
+        livingRoom1.addDevice(tv2);
+
+        dinningRoom.addDevice(temperatureDinningRoom);
+
+        office.addDevice(temperatureOffice);
+        office.addDevice(computerFather);
+        office.addDevice(computerMother);
+        office.addDevice(tv3);
+
+        parentsBedRoom.addDevice(temperatureParents);
+        parentsBedRoom.addDevice(tv4);
+        parentsBedRoom.addResident(george);
+        parentsBedRoom.addResident(lily);
+
+        oscarBedRoom.addDevice(temperatureOscar);
+        oscarBedRoom.addDevice(computerOscar);
+        oscarBedRoom.addDevice(tv5);
+        oscarBedRoom.addResident(oscar);
+
+        miaBedRoom.addDevice(temperatureMia);
+        miaBedRoom.addDevice(computerMia);
+        miaBedRoom.addDevice(tv6);
+        miaBedRoom.addResident(mia);
+
+        maxBedRoom.addDevice(temperatureMax);
+        maxBedRoom.addDevice(computerMax);
+        maxBedRoom.addResident(max);
+        maxBedRoom.addResident(sophia);
+        maxBedRoom.addResident(hamster);
+        maxBedRoom.addResident(parrot);
+
+        sophiaBedRoom.addDevice(temperatureSophia);
+        maxBedRoom.addDevice(computerSophia);
+
+        return stalinHouse;
     }
 }

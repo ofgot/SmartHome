@@ -16,7 +16,7 @@ public class StoveFactory extends HouseholdAppliancesFactory{
     }
 
     @Override
-    public Device createDevice(double consumption) {
-        return new Stove("Stove",consumption);
+    public Device createDevice(double consumption, String name) {
+        return new Stove(name,consumption);
     }
 }

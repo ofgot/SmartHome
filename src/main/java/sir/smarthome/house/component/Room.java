@@ -87,6 +87,10 @@ public class Room implements HouseComponent {
         return equipment;
     }
 
+    public void addEquipment(Equipment equipment) {
+        this.equipment.add(equipment);
+    }
+
     public void removeEquipment(Equipment equipment) {
         this.equipment.remove(equipment);
     }

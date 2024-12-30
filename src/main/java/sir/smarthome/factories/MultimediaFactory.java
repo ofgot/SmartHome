@@ -15,7 +15,7 @@ public class MultimediaFactory extends DeviceFactory {
     }
 
     @Override
-    public Device createDevice(double consumption) { //make inputs
-        return new TV("Smart TV", consumption);
+    public Device createDevice(double consumption, String name) { //make inputs
+        return new TV(name, consumption);
     }
 }
