@@ -31,6 +31,14 @@ public class Floor implements HouseComponent {
         return new ArrayList<>(rooms);
     }
 
+    @Override
+    public void appendReport(StringBuilder report) {
+        report.append("Floor: ").append(name).append("\n");
+        for (HouseComponent room : rooms) {
+            room.appendReport(report);
+        }
+    }
+
     public record Information(String name, List<HouseComponent> rooms) {};
 
     public Information getInformation() {

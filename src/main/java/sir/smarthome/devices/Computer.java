@@ -3,9 +3,9 @@ package sir.smarthome.devices;
 import java.util.*;
 
 public class Computer implements Device {
-    private UUID id;
-    private String name;
-    private double powerConsumption;
+    private final UUID id;
+    private final String name;
+    private final double powerConsumption;
     private int usageDuration;
     private Date lastTurnOn;
 

@@ -3,7 +3,7 @@ package sir.smarthome.house.component;
 import org.junit.jupiter.api.Test;
 import sir.smarthome.devices.Device;
 import sir.smarthome.factories.ComputerFactory;
-import sir.smarthome.resident.Human;
+import sir.smarthome.residents.Human;
 
 import java.util.UUID;
 
