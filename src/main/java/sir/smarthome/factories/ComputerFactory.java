@@ -16,8 +16,8 @@ public class ComputerFactory extends HouseholdAppliancesFactory {
     }
 
     @Override
-    public Device createDevice(double consumption) { // make inputs
-        return new Computer("Gaming Computer", consumption);
+    public Device createDevice(double consumption, String name) { // make inputs
+        return new Computer(name, consumption);
     }
 }
 
