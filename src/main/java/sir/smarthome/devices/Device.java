@@ -6,10 +6,11 @@ public interface Device {
     UUID getId();
     String getName();
     double getPowerConsumption();
-    int getUsageDuration();
+    double getUsageDuration();
     Date getLastTurnOn();
     void turnOn();
     void turnOff();
+    void calculateUsageDuration();
     double getUsageConsumption();
     int getCondition();
 }

@@ -5,10 +5,15 @@ import sir.smarthome.factories.*;
 import sir.smarthome.house.component.Building;
 import sir.smarthome.house.component.Floor;
 import sir.smarthome.house.component.Room;
+import sir.smarthome.reports.ConsumptionReportStrategy;
 import sir.smarthome.reports.HouseConfigurationReport;
+import sir.smarthome.reports.ReportStrategy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SmartHomeApplication {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         DeviceFactory computerFactory = ComputerFactory.getInstance();
         DeviceFactory fridgeFactory = FridgeFactory.getInstance();
         DeviceFactory multimediaFactory = MultimediaFactory.getInstance();
@@ -43,6 +48,18 @@ public class SmartHomeApplication {
         building.addComponent(thirdFloor);
 
         HouseConfigurationReport report = new HouseConfigurationReport(building);
+        ConsumptionReportStrategy strategy = new ConsumptionReportStrategy();
+
+        List<Device> devices = new ArrayList<>();
+        devices.add(computer);
+        devices.add(fridge);
+        devices.add(tv);
+
+        Thread.sleep(2000);
+
+        strategy.collectData(devices);
+        System.out.println(strategy.generateReport());
+        
         System.out.println(report.generateReport());
     }
 }
