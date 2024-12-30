@@ -39,9 +39,4 @@ public class Building implements HouseComponent {
         }
     }
 
-    public record Information(String name, List<HouseComponent> floors) {};
-    
-    public Information getInformation() {
-        return new Information(name, floors);
-    }
 }

@@ -38,10 +38,4 @@ public class Floor implements HouseComponent {
             room.appendReport(report);
         }
     }
-
-    public record Information(String name, List<HouseComponent> rooms) {};
-
-    public Information getInformation() {
-        return new Information(name, rooms);
-    }
 }
