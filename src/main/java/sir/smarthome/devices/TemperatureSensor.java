@@ -12,6 +12,7 @@ public class TemperatureSensor implements Device {
     private Date lastTurnOn;
     private int temperature;
     private List<Observer> observers;
+    private int condition;
 
     public TemperatureSensor(String name, double powerConsumption) {
         this.id = UUID.randomUUID();
@@ -19,6 +20,7 @@ public class TemperatureSensor implements Device {
         this.powerConsumption = powerConsumption;
         this.usageDuration = 0;
         this.observers = new ArrayList<>();
+        this.condition = 100;
     }
 
     @Override
@@ -88,5 +90,10 @@ public class TemperatureSensor implements Device {
     @Override
     public double getUsageConsumption() {
         return usageDuration * powerConsumption;
+    }
+    
+    @Override
+    public int getCondition() {
+        return this.condition;
     }
 }
