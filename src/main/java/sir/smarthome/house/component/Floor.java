@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Floor implements HouseComponent {
-    private String name;
+    private final String name;
     private final List<HouseComponent> rooms = new ArrayList<>();
 
     public Floor(String name) {
