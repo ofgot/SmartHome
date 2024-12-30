@@ -1,13 +1,16 @@
 package sir.smarthome.devices;
 
+import java.io.DataOutput;
 import java.util.*;
 
 public class TV implements Device {
     private UUID id;
     private String name;
     private double powerConsumption;
-    private int usageDuration;
-    private Date lastTurnOn;
+    private double usageDuration;
+    private Date lastSync = new Date();
+    private boolean isTurnedOn = true;
+    private Date lastTurnOn = new Date();
     private int condition;
 
     public TV(String name, double powerConsumption) {
@@ -34,7 +37,7 @@ public class TV implements Device {
     }
 
     @Override
-    public int getUsageDuration() {
+    public double getUsageDuration() {
         return usageDuration;
     }
 
@@ -57,16 +60,25 @@ public class TV implements Device {
 
     @Override
     public void turnOn() {
+        isTurnedOn = true;
         lastTurnOn = new Date();
     }
 
     @Override
     public void turnOff() {
-        usageDuration += (int) ((new Date().getTime() - lastTurnOn.getTime()) / 1000);
+        isTurnedOn = false;
+    }
+
+    @Override
+    public void calculateUsageDuration() {
+        if (!isTurnedOn) return;
+        usageDuration += ((double) (new Date().getTime() - lastSync.getTime()) / 3600);
+        lastSync = new Date();
     }
 
     @Override
     public double getUsageConsumption() {
+        calculateUsageDuration();
         return usageDuration * powerConsumption;
     }
 

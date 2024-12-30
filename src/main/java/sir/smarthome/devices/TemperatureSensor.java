@@ -8,8 +8,10 @@ public class TemperatureSensor implements Device {
     private UUID id;
     private String name;
     private double powerConsumption;
-    private int usageDuration;
-    private Date lastTurnOn;
+    private double usageDuration;
+    private Date lastSync = new Date();
+    private boolean isTurnedOn = true;
+    private Date lastTurnOn = new Date();
     private int temperature;
     private List<Observer> observers;
     private int condition;
@@ -39,7 +41,7 @@ public class TemperatureSensor implements Device {
     }
 
     @Override
-    public int getUsageDuration() {
+    public double getUsageDuration() {
         return usageDuration;
     }
 
@@ -79,16 +81,25 @@ public class TemperatureSensor implements Device {
 
     @Override
     public void turnOn() {
+        isTurnedOn = true;
         lastTurnOn = new Date();
     }
 
     @Override
     public void turnOff() {
-        usageDuration += (int) ((new Date().getTime() - lastTurnOn.getTime()) / 1000);
+        isTurnedOn = false;
+    }
+
+    @Override
+    public void calculateUsageDuration() {
+        if (!isTurnedOn) return;
+        usageDuration += ((double) (new Date().getTime() - lastSync.getTime()) / 3600);
+        lastSync = new Date();
     }
 
     @Override
     public double getUsageConsumption() {
+        calculateUsageDuration();
         return usageDuration * powerConsumption;
     }
     
