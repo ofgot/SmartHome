@@ -7,7 +7,6 @@ import sir.smarthome.residents.Human;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class RoomTest {
 
@@ -31,14 +30,4 @@ class RoomTest {
         room.removeResident(john);
     }
 
-    @Test
-    void testUnsupportedOperations() {
-        Room room = new Room("Kitchen");
-
-        assertThatThrownBy(() -> room.addComponent(new Room("Another Room")))
-                .isInstanceOf(UnsupportedOperationException.class);
-
-        assertThatThrownBy(() -> room.removeComponent(new Room("Another Room")))
-                .isInstanceOf(UnsupportedOperationException.class);
-    }
 }

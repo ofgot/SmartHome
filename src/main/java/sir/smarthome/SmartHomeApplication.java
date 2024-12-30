@@ -1,6 +1,5 @@
 package sir.smarthome;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import sir.smarthome.devices.Device;
 import sir.smarthome.factories.*;
 import sir.smarthome.house.component.Building;
@@ -8,7 +7,6 @@ import sir.smarthome.house.component.Floor;
 import sir.smarthome.house.component.Room;
 import sir.smarthome.reports.HouseConfigurationReport;
 
-@SpringBootApplication
 public class SmartHomeApplication {
     public static void main(String[] args) {
         DeviceFactory computerFactory = ComputerFactory.getInstance();

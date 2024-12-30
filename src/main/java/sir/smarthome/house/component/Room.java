@@ -37,6 +37,7 @@ public class Room implements HouseComponent {
         return List.of();
     }
 
+
     @Override
     public void appendReport(StringBuilder report) {
         report.append("Room: ").append(name).append("\n");
