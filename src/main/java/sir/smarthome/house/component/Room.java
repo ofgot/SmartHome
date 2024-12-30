@@ -71,10 +71,4 @@ public class Room implements HouseComponent {
     public void removeResident(Resident resident) {
         residents.remove(resident);
     }
-
-    public record Information(String name, List<Device> devices, List<Resident> residents) {};
-
-    public Information getInformation() {
-        return new Information(name, devices, residents);
-    }
 }
