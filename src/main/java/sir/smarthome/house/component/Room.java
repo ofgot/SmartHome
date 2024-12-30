@@ -1,5 +1,6 @@
 package sir.smarthome.house.component;
 
+import sir.smarthome.common.Equipment;
 import sir.smarthome.devices.Device;
 import sir.smarthome.residents.Resident;
 
@@ -10,6 +11,7 @@ public class Room implements HouseComponent {
     private final String name;
     private final List<Device> devices = new ArrayList<>();
     private final List<Resident> residents = new ArrayList<>();
+    private final List<Equipment> equipment = new ArrayList<>();
 
     public Room(String name) {
         this.name = name;
@@ -46,6 +48,14 @@ public class Room implements HouseComponent {
         } else {
             report.append("  No devices\n");
         }
+        if (!equipment.isEmpty()) {
+            report.append("  Equipment:\n");
+            for (Equipment equipment : equipment) {
+                report.append("    - ").append(equipment.getName()).append("\n");
+            }
+        } else {
+            report.append("  No equipment\n");
+        }
         if (!residents.isEmpty()) {
             report.append("  Residents:\n");
             for (Resident resident : residents) {
@@ -70,5 +80,13 @@ public class Room implements HouseComponent {
 
     public void removeResident(Resident resident) {
         residents.remove(resident);
+    }
+
+    public List<Equipment> getEquipment() {
+        return equipment;
+    }
+
+    public void removeEquipment(Equipment equipment) {
+        this.equipment.remove(equipment);
     }
 }
