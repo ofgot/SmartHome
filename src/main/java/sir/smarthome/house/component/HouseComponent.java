@@ -7,5 +7,5 @@ public interface HouseComponent {
     void addComponent(HouseComponent component);
     void removeComponent(HouseComponent component);
     List<HouseComponent> getComponents();
-    
+    void appendReport(StringBuilder report);
 }

@@ -1,13 +1,13 @@
 package sir.smarthome.house.component;
 
 import sir.smarthome.devices.Device;
-import sir.smarthome.resident.Resident;
+import sir.smarthome.residents.Resident;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Room implements HouseComponent {
-    private String name;
+    private final String name;
     private final List<Device> devices = new ArrayList<>();
     private final List<Resident> residents = new ArrayList<>();
 
@@ -33,6 +33,27 @@ public class Room implements HouseComponent {
     @Override
     public List<HouseComponent> getComponents() {
         return List.of();
+    }
+
+    @Override
+    public void appendReport(StringBuilder report) {
+        report.append("Room: ").append(name).append("\n");
+        if (!devices.isEmpty()) {
+            report.append("  Devices:\n");
+            for (Device device : devices) {
+                report.append("    - ").append(device.getName()).append("\n");
+            }
+        } else {
+            report.append("  No devices\n");
+        }
+        if (!residents.isEmpty()) {
+            report.append("  Residents:\n");
+            for (Resident resident : residents) {
+                report.append("    - ").append(resident.getName()).append("\n");
+            }
+        } else {
+            report.append("  No residents\n");
+        }
     }
 
     public void addDevice(Device device) {
