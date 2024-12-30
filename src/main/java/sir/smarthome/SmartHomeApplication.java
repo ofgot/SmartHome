@@ -2,14 +2,10 @@ package sir.smarthome;
 
 import sir.smarthome.common.Equipment;
 import sir.smarthome.devices.Device;
-import sir.smarthome.devices.Fridge;
 import sir.smarthome.factories.*;
-import sir.smarthome.house.component.Building;
-import sir.smarthome.house.component.Floor;
-import sir.smarthome.house.component.Room;
+import sir.smarthome.house.component.*;
 import sir.smarthome.reports.HouseConfigurationReport;
-import sir.smarthome.residents.Animal;
-import sir.smarthome.residents.Human;
+import sir.smarthome.residents.*;
 
 public class SmartHomeApplication {
     HouseConfigurationReport houseConfigurationReport;
