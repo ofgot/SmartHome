@@ -6,8 +6,9 @@ public abstract class Resident {
     private UUID id;
     private String name;
     private ResidentType type;
-    public Resident(UUID id, String name, ResidentType type) {
-        this.id = id;
+
+    public Resident(String name, ResidentType type) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.type = type;
     }

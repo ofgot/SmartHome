@@ -16,7 +16,7 @@ public class SensorFactory extends DeviceFactory {
     }
 
     @Override
-    public Device createDevice() { // make inputs
+    public Device createDevice(double consumption) { // make inputs
         return new TemperatureSensor("Home Temperature Sensor", 50.0);
     }
 }
