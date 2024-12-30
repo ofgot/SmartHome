@@ -1,9 +1,12 @@
 package sir.smarthome.common;
 
-import java.util.UUID;
 
 public class Equipment {
-    private String name;
+    private final String name;
+
+    public Equipment(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;

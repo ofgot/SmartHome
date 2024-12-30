@@ -13,7 +13,7 @@ class RoomTest {
     @Test
     void testAddAndRemoveDevice() {
         Room room = new Room("Living Room");
-        Device device = ComputerFactory.getInstance().createDevice();
+        Device device = ComputerFactory.getInstance().createDevice(2);
 
         room.addDevice(device);
 
@@ -23,7 +23,7 @@ class RoomTest {
     @Test
     void testAddAndRemoveResident() {
         Room room = new Room("Bedroom");
-        Human john = new Human(UUID.randomUUID(), "John");
+        Human john = new Human( "John");
 
         room.addResident(john);
 
