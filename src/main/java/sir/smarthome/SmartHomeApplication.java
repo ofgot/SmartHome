@@ -165,6 +165,8 @@ public class SmartHomeApplication {
         ActivityReportStrategy activityReportStrategy = new ActivityReportStrategy();
         EventReportStrategy eventReportStrategy = new EventReportStrategy();
 
+        ReportGenerator reportGenerator = new ReportGenerator(eventReportStrategy);
+
         // Commands
         Command increaseVolume = new IncreaseVolumeAction((TV) tv1, dasa, 5);
         Command decreaseVolume = new DecreaseVolumeAction((TV) tv3, tim, 3);
@@ -172,14 +174,27 @@ public class SmartHomeApplication {
         Command loadProductMilk = new LoadProductAction((Fridge) fridge1, perdelko, milk);
         Command loadProductBread = new LoadProductAction((Fridge) fridge2, perdelko, bread);
         Command loadProductEggs = new LoadProductAction((Fridge) fridge2, perdelko, eggs);
+        Command loadProductButter = new LoadProductAction((Fridge) fridge2, perdelko, butter);
 
         Command takeProductMilk = new TakeProductAction((Fridge) fridge1, pepa, milk);
         Command takeProductEggs = new TakeProductAction((Fridge) fridge2, pepa, milk);
 
         Command turnOffTV = new TurnOffDeviceAction(tv4, tim);
 
-        // Execute
-        ReportGenerator reportGenerator = new ReportGenerator(activityReportStrategy);
+        // Execute eventReportStrategy
+        reportGenerator.registerCommand(increaseVolume);
+        reportGenerator.registerCommand(decreaseVolume);
+        reportGenerator.registerCommand(loadProductMilk);
+        reportGenerator.registerCommand(loadProductBread);
+        reportGenerator.registerCommand(loadProductEggs);
+        reportGenerator.registerCommand(takeProductMilk);
+        reportGenerator.registerCommand(loadProductButter);
+        reportGenerator.registerCommand(takeProductEggs);
+        reportGenerator.registerCommand(turnOffTV);
+        System.out.println(reportGenerator.generateReport());
+
+        // Execute activityReportStrategy
+        reportGenerator.setReportStrategy(activityReportStrategy);
         DeviceApi api = new DeviceApi(reportGenerator);
 
         api.setAction(increaseVolume);
@@ -206,11 +221,21 @@ public class SmartHomeApplication {
         api.setAction(turnOffTV);
         api.executeAction();
 
-        // reports
+        // Execute consumptionReportStrategy
+        reportGenerator.setReportStrategy(consumptionReportStrategy);
+        consumptionReportStrategy.setData(api.getDevices());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        System.out.println(consumptionReportStrategy.generateReport());
+
+        // report houseConfigurationReport
         System.out.println(houseConfigurationReport.generateReport());
-        System.out.println(reportGenerator.generateReport());
     }
 
+    // second config =================================================================================
     public Building secondConfig(){
         // Residents
         // HUMAN
@@ -221,6 +246,7 @@ public class SmartHomeApplication {
         Human max = new Human("Max");    // Son
         Human sophia = new Human("Sophia"); // Daughter
 
+        // ANIMALS
         // ANIMALS
         Animal hamster = new Animal("Squeaky McSqueakface");
         Animal parrot = new Animal("Sir Tweets-a-Lot");

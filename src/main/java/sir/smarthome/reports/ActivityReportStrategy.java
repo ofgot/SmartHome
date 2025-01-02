@@ -15,7 +15,7 @@ public class ActivityReportStrategy implements ReportStrategy {
 
     @Override
     public String generateReport() {
-        StringBuilder report = new StringBuilder("Activity Report:\n");
+        StringBuilder report = new StringBuilder("\nActivity Report:\n");
         report.append("====================\n");
         data.forEach((resident, deviceMap) -> {
             report.append(String.format("Resident: %s%n", resident.getName()));

@@ -1,6 +1,5 @@
 package sir.smarthome.reports;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventReportStrategy implements ReportStrategy {
@@ -12,11 +11,13 @@ public class EventReportStrategy implements ReportStrategy {
     
     @Override
     public String generateReport() {
-        StringBuilder report = new StringBuilder("Event Report:\n");
+        StringBuilder report = new StringBuilder("\nEvent Report:\n");
+        report.append("==========================\n");
         for (Event event : data) {
             report.append(String.format("Date: %s, Action: %s%n",
                     event.getDate(), event.getAction()));
         }
+        report.append("==========================\n");
         return report.toString();
     }
 }
