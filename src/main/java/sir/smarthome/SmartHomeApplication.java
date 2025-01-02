@@ -224,11 +224,14 @@ public class SmartHomeApplication {
         // Execute consumptionReportStrategy
         reportGenerator.setReportStrategy(consumptionReportStrategy);
         consumptionReportStrategy.setData(api.getDevices());
+
+        // warnings ///////////////////////////////////////////////////
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1000); // 1 sec
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+
         System.out.println(consumptionReportStrategy.generateReport());
 
         // report houseConfigurationReport
@@ -246,7 +249,6 @@ public class SmartHomeApplication {
         Human max = new Human("Max");    // Son
         Human sophia = new Human("Sophia"); // Daughter
 
-        // ANIMALS
         // ANIMALS
         Animal hamster = new Animal("Squeaky McSqueakface");
         Animal parrot = new Animal("Sir Tweets-a-Lot");

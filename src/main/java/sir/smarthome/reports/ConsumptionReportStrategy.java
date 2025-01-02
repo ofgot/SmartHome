@@ -25,7 +25,7 @@ public class ConsumptionReportStrategy implements ReportStrategy {
         consumptionList.forEach((device, consumption) ->
                 report.append(String.format("Device: %s, Consumption: %.2f Wh%n", device.getName(), consumption))
         );
-        report.append("====================\n");
+        report.append("====================");
 
         return report.toString();
     }
