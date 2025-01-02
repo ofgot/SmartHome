@@ -6,7 +6,7 @@ public class HeatingSystemObserver implements Observer {
     @Override
     public void update(int temperature) {
         this.temperature = temperature;
-        if (this.temperature > 25) {
+        if (this.temperature > 22) {
             turnOffHeatingSystem();
         } else {
             System.out.println("Heating system is on.");
@@ -15,5 +15,10 @@ public class HeatingSystemObserver implements Observer {
 
     public void turnOffHeatingSystem() {
         System.out.println("Heating system turned off.");
+    }
+
+    @Override
+    public String toString() {
+        return "Heating System";
     }
 }

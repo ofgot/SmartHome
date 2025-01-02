@@ -14,8 +14,8 @@ public class TakeProductAction extends BaseAction<Fridge, Resident>{
 
     @Override
     public void execute() {
-        System.out.println("Taking product");
-        receiver.takeProduct(product);
+            System.out.println("Taking product");
+            receiver.takeProduct(product);
     }
 
     @Override
