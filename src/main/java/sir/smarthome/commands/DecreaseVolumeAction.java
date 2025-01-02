@@ -16,4 +16,9 @@ public class DecreaseVolumeAction extends BaseAction<TV, Resident> {
         System.out.println("Decrease volume to " + amount);
         receiver.decreaseVolume(amount);
     }
+
+    @Override
+    public String toString() {
+        return "IncreaseVolumeAction by " + executor.getName() + " to " + receiver.getName() + " with amount: " + amount;
+    }
 }

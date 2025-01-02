@@ -14,9 +14,10 @@ public class HouseConfigurationReport {
 
     public String generateReport() {
         StringBuilder report = new StringBuilder();
-        report.append("House Configuration Report\n");
+        report.append("\nHouse Configuration Report\n");
         report.append("==========================\n");
         building.appendReport(report);
+        report.append("==========================\n");
         return report.toString();
     }
 }

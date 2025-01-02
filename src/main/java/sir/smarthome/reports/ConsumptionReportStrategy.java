@@ -18,12 +18,15 @@ public class ConsumptionReportStrategy implements ReportStrategy {
         for (Device device : data) {
             consumptionList.put(device, device.getUsageConsumption());
         }
-        
-        StringBuilder report = new StringBuilder("Consumption Report:\n");
-        
+
+        StringBuilder report = new StringBuilder("\nConsumption Report:\n");
+        report.append("====================\n");
+
         consumptionList.forEach((device, consumption) ->
                 report.append(String.format("Device: %s, Consumption: %.2f Wh%n", device.getName(), consumption))
         );
+        report.append("====================\n");
+
         return report.toString();
     }
 }

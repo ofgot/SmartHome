@@ -15,4 +15,9 @@ public class CheckTemperature extends BaseAction<HeatingSystemObserver, Temperat
         System.out.println("Checking temperature");
         executor.setTemperature(Common.getTemperature());
     }
+
+    @Override
+    public String toString() {
+        return "CheckTemperature action by " + executor.getName() + " for receiver: " + receiver;
+    }
 }
