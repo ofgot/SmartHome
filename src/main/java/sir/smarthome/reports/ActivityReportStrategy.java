@@ -16,12 +16,14 @@ public class ActivityReportStrategy implements ReportStrategy {
     @Override
     public String generateReport() {
         StringBuilder report = new StringBuilder("Activity Report:\n");
+        report.append("====================\n");
         data.forEach((resident, deviceMap) -> {
             report.append(String.format("Resident: %s%n", resident.getName()));
             deviceMap.forEach((device, count) ->
                     report.append(String.format("  Device: %s, Usage Count: %d%n", device.getName(), count))
             );
         });
+        report.append("====================\n");
         return report.toString();
     }
 }
