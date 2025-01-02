@@ -1,10 +1,12 @@
 package sir.smarthome;
 
+import sir.smarthome.commands.*;
 import sir.smarthome.common.Equipment;
 import sir.smarthome.devices.Device;
+import sir.smarthome.devices.TV;
 import sir.smarthome.factories.*;
 import sir.smarthome.house.component.*;
-import sir.smarthome.reports.HouseConfigurationReport;
+import sir.smarthome.reports.*;
 import sir.smarthome.residents.*;
 
 public class SmartHomeApplication {
