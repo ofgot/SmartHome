@@ -1,23 +1,26 @@
 package sir.smarthome;
 
 import sir.smarthome.commands.*;
+import sir.smarthome.common.Common;
 import sir.smarthome.common.Equipment;
 import sir.smarthome.common.Product;
 import sir.smarthome.devices.Device;
 import sir.smarthome.devices.Fridge;
 import sir.smarthome.devices.TV;
+import sir.smarthome.devices.TemperatureSensor;
 import sir.smarthome.factories.*;
 import sir.smarthome.house.component.*;
+import sir.smarthome.observers.HeatingSystemObserver;
 import sir.smarthome.reports.*;
 import sir.smarthome.residents.*;
 
 public class SmartHomeApplication {
 
-    public void run(){
+    public void run() throws InterruptedException {
         firstConfig();
     }
 
-    public void firstConfig(){
+    public void firstConfig() throws InterruptedException {
         // Residents
         // HUMAN
         Human perdelko = new Human("Perdelko"); // cooker
@@ -52,25 +55,32 @@ public class SmartHomeApplication {
         DeviceFactory stoveFactory = StoveFactory.getInstance();
 
         // TV
-        Device tv1 = multimediaFactory.createDevice(1, "TV1");
-        Device tv2 = multimediaFactory.createDevice(2,"TV2");
-        Device tv3 = multimediaFactory.createDevice(2,"TV3");
-        Device tv4 = multimediaFactory.createDevice(2,"TV4");
+        Device tv1 = multimediaFactory.createDevice(100, "TV1");
+        Device tv2 = multimediaFactory.createDevice(200,"TV2");
+        Device tv3 = multimediaFactory.createDevice(200,"TV3");
+        Device tv4 = multimediaFactory.createDevice(200,"TV4");
 
         // Fridge
-        Device fridge1 = fridgeFactory.createDevice(2, "Fridge1");
-        Device fridge2 = fridgeFactory.createDevice(3, "Fridge2");
-        Device fridge3 = fridgeFactory.createDevice(1, "Fridge3");
-        Device fridge4 = fridgeFactory.createDevice(2, "Fridge4");
-        Device fridge5 = fridgeFactory.createDevice(2, "Fridge5");
-        Device fridge6 = fridgeFactory.createDevice(1, "Fridge6");
+        Device fridge1 = fridgeFactory.createDevice(200, "Fridge1");
+        Device fridge2 = fridgeFactory.createDevice(300, "Fridge2");
+        Device fridge3 = fridgeFactory.createDevice(100, "Fridge3");
+        Device fridge4 = fridgeFactory.createDevice(200, "Fridge4");
+        Device fridge5 = fridgeFactory.createDevice(200, "Fridge5");
+        Device fridge6 = fridgeFactory.createDevice(100, "Fridge6");
 
         // Temperature Sensor
-        Device temperatureKitchen = sensorFactory.createDevice(0.1, "Temperature sensor Kitchen");
-        Device temperatureLivingRoom1 = sensorFactory.createDevice(0.1, "Temperature sensor livingRoom1");
-        Device temperatureLivingRoom2 = sensorFactory.createDevice(0.1, "Temperature sensor livingRoom2");
-        Device temperatureLivingRoom3 = sensorFactory.createDevice(0.1, "Temperature sensor livingRoom3");
-        Device temperatureAdministration = sensorFactory.createDevice(0.1, "Temperature sensor administration");
+        HeatingSystemObserver heatingSystemObserver = new HeatingSystemObserver();
+        Device temperatureKitchen = sensorFactory.createDevice(10, "Temperature sensor Kitchen");
+        Device temperatureLivingRoom1 = sensorFactory.createDevice(10, "Temperature sensor livingRoom1");
+        Device temperatureLivingRoom2 = sensorFactory.createDevice(10, "Temperature sensor livingRoom2");
+        Device temperatureLivingRoom3 = sensorFactory.createDevice(10, "Temperature sensor livingRoom3");
+        Device temperatureAdministration = sensorFactory.createDevice(10, "Temperature sensor administration");
+
+        TemperatureSensor kitchenSensor = (TemperatureSensor) temperatureKitchen;
+        TemperatureSensor livingRoomSensor1 = (TemperatureSensor) temperatureLivingRoom1;
+        TemperatureSensor livingRoomSensor2 = (TemperatureSensor) temperatureLivingRoom2;
+        TemperatureSensor livingRoomSensor3 = (TemperatureSensor) temperatureLivingRoom3;
+        TemperatureSensor administrationSensor = (TemperatureSensor) temperatureAdministration;
 
         // Computer
         Device computer1 = computerFactory.createDevice(2, "Computer1");
@@ -159,13 +169,20 @@ public class SmartHomeApplication {
         storeRoom.addEquipment(bike1);
         storeRoom.addEquipment(bike2);
 
-        //reports
+        // Observer
+        kitchenSensor.addObserver(heatingSystemObserver);
+        livingRoomSensor1.addObserver(heatingSystemObserver);
+        livingRoomSensor2.addObserver(heatingSystemObserver);
+        livingRoomSensor3.addObserver(heatingSystemObserver);
+        administrationSensor.addObserver(heatingSystemObserver);
+
+        // Reports
         HouseConfigurationReport houseConfigurationReport = new HouseConfigurationReport(restaurant);
         ConsumptionReportStrategy consumptionReportStrategy = new ConsumptionReportStrategy();
         ActivityReportStrategy activityReportStrategy = new ActivityReportStrategy();
         EventReportStrategy eventReportStrategy = new EventReportStrategy();
 
-        ReportGenerator reportGenerator = new ReportGenerator(eventReportStrategy);
+        ReportGenerator reportGenerator = new ReportGenerator(activityReportStrategy);
 
         // Commands
         Command increaseVolume = new IncreaseVolumeAction((TV) tv1, dasa, 5);
@@ -181,20 +198,13 @@ public class SmartHomeApplication {
 
         Command turnOffTV = new TurnOffDeviceAction(tv4, tim);
 
-        // Execute eventReportStrategy
-        reportGenerator.registerCommand(increaseVolume);
-        reportGenerator.registerCommand(decreaseVolume);
-        reportGenerator.registerCommand(loadProductMilk);
-        reportGenerator.registerCommand(loadProductBread);
-        reportGenerator.registerCommand(loadProductEggs);
-        reportGenerator.registerCommand(takeProductMilk);
-        reportGenerator.registerCommand(loadProductButter);
-        reportGenerator.registerCommand(takeProductEggs);
-        reportGenerator.registerCommand(turnOffTV);
-        System.out.println(reportGenerator.generateReport());
+        Command checkKitchenTemperature = new CheckTemperature(kitchenSensor, heatingSystemObserver);
+        Command checkLivingRoom1Temperature = new CheckTemperature(livingRoomSensor1, heatingSystemObserver);
+        Command checkLivingRoom2Temperature = new CheckTemperature(livingRoomSensor2, heatingSystemObserver);
+        Command checkLivingRoom3Temperature = new CheckTemperature(livingRoomSensor3, heatingSystemObserver);
+        Command administrationRoom3Temperature = new CheckTemperature(administrationSensor, heatingSystemObserver);
 
         // Execute activityReportStrategy
-        reportGenerator.setReportStrategy(activityReportStrategy);
         DeviceApi api = new DeviceApi(reportGenerator);
 
         api.setAction(increaseVolume);
@@ -209,6 +219,9 @@ public class SmartHomeApplication {
         api.setAction(loadProductBread);
         api.executeAction();
 
+        api.setAction(loadProductButter);
+        api.executeAction();
+
         api.setAction(loadProductEggs);
         api.executeAction();
 
@@ -221,18 +234,35 @@ public class SmartHomeApplication {
         api.setAction(turnOffTV);
         api.executeAction();
 
+        api.setAction(checkKitchenTemperature);
+        api.executeAction();
+
+        api.setAction(checkLivingRoom1Temperature);
+        api.executeAction();
+
+        api.setAction(checkLivingRoom2Temperature);
+        api.executeAction();
+
+        api.setAction(checkLivingRoom3Temperature);
+        api.executeAction();
+
+        api.setAction(administrationRoom3Temperature);
+        api.executeAction();
+
+        System.out.println(reportGenerator.generateReport());
+        reportGenerator.setReportStrategy(eventReportStrategy);
+        System.out.println(reportGenerator.generateReport());
+
         // Execute consumptionReportStrategy
         reportGenerator.setReportStrategy(consumptionReportStrategy);
-        consumptionReportStrategy.setData(api.getDevices());
 
         // warnings ///////////////////////////////////////////////////
-        try {
-            Thread.sleep(1000); // 1 sec
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
 
-        System.out.println(consumptionReportStrategy.generateReport());
+        Thread.sleep(1000); // 1 sec
+
+        ///////////////////////////////////////////////////////////////
+
+        System.out.println(reportGenerator.generateReport());
 
         // report houseConfigurationReport
         System.out.println(houseConfigurationReport.generateReport());

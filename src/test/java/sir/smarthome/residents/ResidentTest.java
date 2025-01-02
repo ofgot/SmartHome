@@ -12,7 +12,7 @@ class ResidentTest {
     void testHumanCreation() {
         UUID id = UUID.randomUUID();
         String name = "Ofgot";
-        Human human = new Human(id, name);
+        Human human = new Human(name);
 
         assertNotNull(human.getId());
         assertEquals(id, human.getId());
@@ -24,7 +24,7 @@ class ResidentTest {
     void testAnimalCreation() {
         UUID id = UUID.randomUUID();
         String name = "Whiskers";
-        Animal animal = new Animal(id, name);
+        Animal animal = new Animal(name);
 
         assertNotNull(animal.getId());
         assertEquals(id, animal.getId());
@@ -35,11 +35,11 @@ class ResidentTest {
     @Test
     void testResidentType() {
         UUID humanId = UUID.randomUUID();
-        Human human = new Human(humanId, "Alice");
+        Human human = new Human("Alice");
         assertEquals(ResidentType.HUMAN, human.getType());
 
         UUID animalId = UUID.randomUUID();
-        Animal animal = new Animal(animalId, "Felix");
+        Animal animal = new Animal("Felix");
         assertEquals(ResidentType.CAT, animal.getType());
     }
 }

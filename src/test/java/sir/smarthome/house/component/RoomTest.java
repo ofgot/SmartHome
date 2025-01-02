@@ -13,7 +13,7 @@ class RoomTest {
     @Test
     void testAddAndRemoveDevice() {
         Room room = new Room("Living Room");
-        Device device = ComputerFactory.getInstance().createDevice(2);
+        Device device = ComputerFactory.getInstance().createDevice(2, "Computer");
 
         room.addDevice(device);
 

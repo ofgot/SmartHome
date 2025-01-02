@@ -18,7 +18,7 @@ class ComputerFactoryTest {
     @Test
     void createDevice() {
         DeviceFactory factory = ComputerFactory.getInstance();
-        Device device = factory.createDevice(1);
+        Device device = factory.createDevice( 1, "Sensor");
 
         assertNotNull(device, "Device should not be null.");
         assertInstanceOf(Computer.class, device, "Device should be an instance of Computer.");

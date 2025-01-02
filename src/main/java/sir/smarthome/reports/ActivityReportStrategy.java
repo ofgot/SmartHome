@@ -23,7 +23,7 @@ public class ActivityReportStrategy implements ReportStrategy {
                     report.append(String.format("  Device: %s, Usage Count: %d%n", device.getName(), count))
             );
         });
-        report.append("====================\n");
+        report.append("====================");
         return report.toString();
     }
 }

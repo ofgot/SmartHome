@@ -17,7 +17,7 @@ public class EventReportStrategy implements ReportStrategy {
             report.append(String.format("Date: %s, Action: %s%n",
                     event.getDate(), event.getAction()));
         }
-        report.append("==========================\n");
+        report.append("==========================");
         return report.toString();
     }
 }
