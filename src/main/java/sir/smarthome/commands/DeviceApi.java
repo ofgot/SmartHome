@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DeviceApi {
     private Command action;
-    private ReportGenerator reportGenerator;
+    private final ReportGenerator reportGenerator;
     private List<Device> devices;
 
     public DeviceApi(ReportGenerator generator) {

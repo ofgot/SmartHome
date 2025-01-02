@@ -2,7 +2,9 @@ package sir.smarthome;
 
 import sir.smarthome.commands.*;
 import sir.smarthome.common.Equipment;
+import sir.smarthome.common.Product;
 import sir.smarthome.devices.Device;
+import sir.smarthome.devices.Fridge;
 import sir.smarthome.devices.TV;
 import sir.smarthome.factories.*;
 import sir.smarthome.house.component.*;
@@ -10,14 +12,12 @@ import sir.smarthome.reports.*;
 import sir.smarthome.residents.*;
 
 public class SmartHomeApplication {
-    HouseConfigurationReport houseConfigurationReport;
 
     public void run(){
-        houseConfigurationReport = new HouseConfigurationReport(secondConfig());
-        System.out.println(houseConfigurationReport.generateReport());
+        firstConfig();
     }
 
-    public Building firstConfig(){
+    public void firstConfig(){
         // Residents
         // HUMAN
         Human perdelko = new Human("Perdelko"); // cooker
@@ -75,6 +75,12 @@ public class SmartHomeApplication {
         // Computer
         Device computer1 = computerFactory.createDevice(2, "Computer1");
         Device computer2 = computerFactory.createDevice(1, "Computer2");
+
+        // Products
+        Product milk = new Product("Milk");
+        Product eggs = new Product("Eggs");
+        Product butter = new Product("Butter");
+        Product bread = new Product("Bread");
 
         // Stove
         Device stove1 = stoveFactory.createDevice(3, "Stove1");
@@ -153,7 +159,56 @@ public class SmartHomeApplication {
         storeRoom.addEquipment(bike1);
         storeRoom.addEquipment(bike2);
 
-        return restaurant;
+        //reports
+        HouseConfigurationReport houseConfigurationReport = new HouseConfigurationReport(restaurant);
+        ConsumptionReportStrategy consumptionReportStrategy = new ConsumptionReportStrategy();
+        ActivityReportStrategy activityReportStrategy = new ActivityReportStrategy();
+        EventReportStrategy eventReportStrategy = new EventReportStrategy();
+
+        // Commands
+        Command increaseVolume = new IncreaseVolumeAction((TV) tv1, dasa, 5);
+        Command decreaseVolume = new DecreaseVolumeAction((TV) tv3, tim, 3);
+
+        Command loadProductMilk = new LoadProductAction((Fridge) fridge1, perdelko, milk);
+        Command loadProductBread = new LoadProductAction((Fridge) fridge2, perdelko, bread);
+        Command loadProductEggs = new LoadProductAction((Fridge) fridge2, perdelko, eggs);
+
+        Command takeProductMilk = new TakeProductAction((Fridge) fridge1, pepa, milk);
+        Command takeProductEggs = new TakeProductAction((Fridge) fridge2, pepa, milk);
+
+        Command turnOffTV = new TurnOffDeviceAction(tv4, tim);
+
+        // Execute
+        ReportGenerator reportGenerator = new ReportGenerator(activityReportStrategy);
+        DeviceApi api = new DeviceApi(reportGenerator);
+
+        api.setAction(increaseVolume);
+        api.executeAction();
+
+        api.setAction(decreaseVolume);
+        api.executeAction();
+
+        api.setAction(loadProductMilk);
+        api.executeAction();
+
+        api.setAction(loadProductBread);
+        api.executeAction();
+
+        api.setAction(loadProductEggs);
+        api.executeAction();
+
+        api.setAction(takeProductMilk);
+        api.executeAction();
+
+        api.setAction(takeProductEggs);
+        api.executeAction();
+
+        api.setAction(turnOffTV);
+        api.executeAction();
+
+        // reports
+        System.out.println(houseConfigurationReport.generateReport());
+        System.out.println(reportGenerator.generateReport());
     }
 
     public Building secondConfig(){
