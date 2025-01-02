@@ -20,6 +20,7 @@ public class DeviceApi {
 
     public void executeAction() {
         if (action != null) {
+            reportGenerator.registerCommand(action);
             action.execute();
         } else {
             System.out.println("No action set!");
