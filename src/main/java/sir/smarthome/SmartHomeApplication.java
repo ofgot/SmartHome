@@ -1,13 +1,9 @@
 package sir.smarthome;
 
 import sir.smarthome.commands.*;
-import sir.smarthome.common.Common;
 import sir.smarthome.common.Equipment;
 import sir.smarthome.common.Product;
-import sir.smarthome.devices.Device;
-import sir.smarthome.devices.Fridge;
-import sir.smarthome.devices.TV;
-import sir.smarthome.devices.TemperatureSensor;
+import sir.smarthome.devices.*;
 import sir.smarthome.factories.*;
 import sir.smarthome.house.component.*;
 import sir.smarthome.observers.HeatingSystemObserver;
@@ -16,8 +12,18 @@ import sir.smarthome.residents.*;
 
 public class SmartHomeApplication {
 
-    public void run() throws InterruptedException {
-        firstConfig();
+    public void run(Integer in) throws InterruptedException {
+        switch (in){
+            case 1:
+                firstConfig();
+                break;
+            case 2:
+                secondConfig();
+                break;
+            default:
+                System.out.println("Invalid input");
+                break;
+        }
     }
 
     public void firstConfig() throws InterruptedException {
@@ -268,16 +274,16 @@ public class SmartHomeApplication {
         System.out.println(houseConfigurationReport.generateReport());
     }
 
-    // second config =================================================================================
-    public Building secondConfig(){
+////// second config ==========================================================================================================
+    public void secondConfig() throws InterruptedException {
         // Residents
         // HUMAN
-        Human george = new Human("George"); // Father
-        Human lily = new Human("Lily");   // Mother
-        Human oscar = new Human("Oscar");  // Son
-        Human mia = new Human("Mia");    // Daughter
-        Human max = new Human("Max");    // Son
-        Human sophia = new Human("Sophia"); // Daughter
+        Human josef = new Human("Josef");       // Father
+        Human nadya = new Human("Nadezda");     // Mother
+        Human jakov = new Human("Jakov");       // Son
+        Human sveta = new Human("Svetlana");    // Daughter
+        Human vasya = new Human("Vasiliy");     // Son
+        Human artem = new Human("Artem");     // Son
 
         // ANIMALS
         Animal hamster = new Animal("Squeaky McSqueakface");
@@ -297,37 +303,48 @@ public class SmartHomeApplication {
         DeviceFactory stoveFactory = StoveFactory.getInstance();
 
         // TV
-        Device tv1 = multimediaFactory.createDevice(1, "TV1");
-        Device tv2 = multimediaFactory.createDevice(2,"TV2");
-        Device tv3 = multimediaFactory.createDevice(1,"TV3");
-        Device tv4 = multimediaFactory.createDevice(2,"TV4");
-        Device tv5 = multimediaFactory.createDevice(1,"TV5");
-        Device tv6 = multimediaFactory.createDevice(2,"TV6");
+        Device tv1 = multimediaFactory.createDevice(10, "TV1");
+        Device tv2 = multimediaFactory.createDevice(20,"TV2");
+        Device tv3 = multimediaFactory.createDevice(15,"TV3");
+        Device tv4 = multimediaFactory.createDevice(20,"TV4");
+        Device tv5 = multimediaFactory.createDevice(10,"TV5");
+        Device tv6 = multimediaFactory.createDevice(20,"TV6");
 
         // Fridge
-        Device fridge1 = fridgeFactory.createDevice(2, "Fridge1");
-        Device fridge2 = fridgeFactory.createDevice(3, "Fridge2");
-        Device stove1 = stoveFactory.createDevice(4, "Stove1");
-        Device stove2 = stoveFactory.createDevice(4, "Stove2");
+        Device fridge1 = fridgeFactory.createDevice(20, "Fridge1");
+        Device fridge2 = fridgeFactory.createDevice(37, "Fridge2");
+        Device stove1 = stoveFactory.createDevice(43, "Stove1");
+        Device stove2 = stoveFactory.createDevice(42, "Stove2");
 
         // Temperature Sensor
-        Device temperatureKitchen = sensorFactory.createDevice(0.1, "Temperature sensor Kitchen");
-        Device temperatureLivingRoom = sensorFactory.createDevice(0.1, "Temperature sensor livingRoom");
-        Device temperatureDinningRoom = sensorFactory.createDevice(0.1, "Dinning room");
-        Device temperatureParents = sensorFactory.createDevice(0.1, "Temperature sensor parents room");
-        Device temperatureOscar = sensorFactory.createDevice(0.1, "Temperature sensor Oscar room");
-        Device temperatureMia = sensorFactory.createDevice(0.1, "Temperature sensor Mia room");
-        Device temperatureMax = sensorFactory.createDevice(0.1, "Temperature sensor Max room");
-        Device temperatureSophia = sensorFactory.createDevice(0.1, "Temperature sensor Sophia room");
-        Device temperatureOffice = sensorFactory.createDevice(0.1, "Temperature sensor office");
+        HeatingSystemObserver heatingSystemObserver = new HeatingSystemObserver();
+        Device temperatureKitchen = sensorFactory.createDevice(10, "Temperature sensor Kitchen");
+        Device temperatureLivingRoom = sensorFactory.createDevice(10, "Temperature sensor livingRoom");
+        Device temperatureDinningRoom = sensorFactory.createDevice(10, "Dinning room");
+        Device temperatureParents = sensorFactory.createDevice(10, "Temperature sensor parents room");
+        Device temperatureOscar = sensorFactory.createDevice(10, "Temperature sensor Oscar room");
+        Device temperatureMia = sensorFactory.createDevice(10, "Temperature sensor Mia room");
+        Device temperatureMax = sensorFactory.createDevice(10, "Temperature sensor Max room");
+        Device temperatureSophia = sensorFactory.createDevice(10, "Temperature sensor Sophia room");
+        Device temperatureOffice = sensorFactory.createDevice(10, "Temperature sensor office");
+
+        TemperatureSensor kitchenSensor = (TemperatureSensor) temperatureKitchen;
+        TemperatureSensor livingRoomSensor = (TemperatureSensor) temperatureLivingRoom;
+        TemperatureSensor dinningRoomSensor = (TemperatureSensor) temperatureDinningRoom;
+        TemperatureSensor parentsRoomSensor = (TemperatureSensor) temperatureParents;
+        TemperatureSensor oscarRoomSensor = (TemperatureSensor) temperatureOscar;
+        TemperatureSensor miaRoomSensor = (TemperatureSensor) temperatureMia;
+        TemperatureSensor maxRoomSensor = (TemperatureSensor) temperatureMax;
+        TemperatureSensor sophiaRoomSensor = (TemperatureSensor) temperatureSophia;
+        TemperatureSensor officeSensor = (TemperatureSensor) temperatureOffice;
 
         // Computer
-        Device computerFather = computerFactory.createDevice(5, "Computer Father");
-        Device computerMother = computerFactory.createDevice(7, "Computer Mother");
-        Device computerOscar = computerFactory.createDevice(4, "Computer Oscar");
-        Device computerMia = computerFactory.createDevice(4, "Computer Mia");
-        Device computerMax = computerFactory.createDevice(4, "Computer Max");
-        Device computerSophia = computerFactory.createDevice(4, "Computer Sophia");
+        Device computerFather = computerFactory.createDevice(53, "Computer Father");
+        Device computerMother = computerFactory.createDevice(62, "Computer Mother");
+        Device computerOscar = computerFactory.createDevice(20, "Computer Oscar");
+        Device computerMia = computerFactory.createDevice(20, "Computer Mia");
+        Device computerMax = computerFactory.createDevice(23, "Computer Max");
+        Device computerSophia = computerFactory.createDevice(23, "Computer Sophia");
 
         // Building
         Building stalinHouse = new Building("Stalin's House");
@@ -392,29 +409,196 @@ public class SmartHomeApplication {
 
         parentsBedRoom.addDevice(temperatureParents);
         parentsBedRoom.addDevice(tv4);
-        parentsBedRoom.addResident(george);
-        parentsBedRoom.addResident(lily);
+        parentsBedRoom.addResident(josef);
+        parentsBedRoom.addResident(nadya);
 
         oscarBedRoom.addDevice(temperatureOscar);
         oscarBedRoom.addDevice(computerOscar);
         oscarBedRoom.addDevice(tv5);
-        oscarBedRoom.addResident(oscar);
+        oscarBedRoom.addResident(jakov);
 
         miaBedRoom.addDevice(temperatureMia);
         miaBedRoom.addDevice(computerMia);
         miaBedRoom.addDevice(tv6);
-        miaBedRoom.addResident(mia);
+        miaBedRoom.addResident(sveta);
 
         maxBedRoom.addDevice(temperatureMax);
         maxBedRoom.addDevice(computerMax);
-        maxBedRoom.addResident(max);
-        maxBedRoom.addResident(sophia);
+        maxBedRoom.addResident(vasya);
+        maxBedRoom.addResident(artem);
         maxBedRoom.addResident(hamster);
         maxBedRoom.addResident(parrot);
 
         sophiaBedRoom.addDevice(temperatureSophia);
         maxBedRoom.addDevice(computerSophia);
 
-        return stalinHouse;
+        // Observer
+        kitchenSensor.addObserver(heatingSystemObserver);
+        livingRoomSensor.addObserver(heatingSystemObserver);
+        dinningRoomSensor.addObserver(heatingSystemObserver);
+        parentsRoomSensor.addObserver(heatingSystemObserver);
+        oscarRoomSensor.addObserver(heatingSystemObserver);
+        miaRoomSensor.addObserver(heatingSystemObserver);
+        maxRoomSensor.addObserver(heatingSystemObserver);
+        sophiaRoomSensor.addObserver(heatingSystemObserver);
+        officeSensor.addObserver(heatingSystemObserver);
+
+        // Reports
+        HouseConfigurationReport houseConfigurationReport = new HouseConfigurationReport(stalinHouse);
+        ConsumptionReportStrategy consumptionReportStrategy = new ConsumptionReportStrategy();
+        ActivityReportStrategy activityReportStrategy = new ActivityReportStrategy();
+        EventReportStrategy eventReportStrategy = new EventReportStrategy();
+
+        ReportGenerator reportGenerator = new ReportGenerator(activityReportStrategy);
+
+        // Commands
+        Command turnOfTv1 = new TurnOffDeviceAction(tv1, josef);
+        Command turnOfTv2 = new TurnOffDeviceAction(tv2, nadya);
+        Command turnOfTv3 = new TurnOffDeviceAction(tv3, josef);
+        Command turnOfTv4 = new TurnOffDeviceAction(tv4, nadya);
+        Command turnOfTv5 = new TurnOffDeviceAction(tv5, josef);
+        Command turnOfTv6 = new TurnOffDeviceAction(tv6, josef);
+
+        Command turnOfStove1 = new TurnOffDeviceAction(stove1, nadya);
+        Command turnOfStove2 = new TurnOffDeviceAction(stove2, nadya);
+
+        Command loadProductMeat = new LoadProductAction((Fridge) fridge1, nadya, new Product("Meat"));
+        Command loadProductMilk = new LoadProductAction((Fridge) fridge1, nadya, new Product("Milk"));
+        Command loadProductBread = new LoadProductAction((Fridge) fridge1, nadya, new Product("Bread"));
+        Command loadProductBread2 = new LoadProductAction((Fridge) fridge2, sveta, new Product("Bread"));
+
+        Command turnOffComputer1 = new TurnOffDeviceAction(computerMother, josef);
+        Command turnOffComputer2 = new TurnOffDeviceAction(computerMia, josef);
+        Command turnOffComputer3 = new TurnOffDeviceAction(computerFather, josef);
+        Command turnOffComputer4 = new TurnOffDeviceAction(computerOscar, josef);
+        Command turnOffComputer5 = new TurnOffDeviceAction(computerMax, josef);
+        Command turnOffComputer6 = new TurnOffDeviceAction(computerSophia, josef);
+
+        Command turnOnComputer = new TurnOnDeviceAction(computerFather, josef);
+
+        Command turnOnStove = new TurnOnDeviceAction(stove1, nadya);
+
+        Command checkKitchenTemperature = new CheckTemperature(kitchenSensor, heatingSystemObserver);
+        Command checkLivingRoomTemperature = new CheckTemperature(livingRoomSensor, heatingSystemObserver);
+        Command checkDinningRoomTemperature = new CheckTemperature(dinningRoomSensor, heatingSystemObserver);
+        Command checkParentsRoomTemperature = new CheckTemperature(parentsRoomSensor, heatingSystemObserver);
+        Command checkOscarRoomTemperature = new CheckTemperature(oscarRoomSensor, heatingSystemObserver);
+        Command checkMiaRoomTemperature = new CheckTemperature(miaRoomSensor, heatingSystemObserver);
+        Command checkMaxRoomTemperature = new CheckTemperature(maxRoomSensor, heatingSystemObserver);
+        Command checkSophiaRoomTemperature = new CheckTemperature(sophiaRoomSensor, heatingSystemObserver);
+        Command checkOfficeTemperature = new CheckTemperature(officeSensor, heatingSystemObserver);
+
+        Command turnOnTv = new TurnOnDeviceAction(tv1, vasya);
+
+        // Execute activityReportStrategy
+        DeviceApi api = new DeviceApi(reportGenerator);
+
+        api.setAction(turnOfTv1);
+        api.executeAction();
+
+        api.setAction(turnOfTv2);
+        api.executeAction();
+
+        api.setAction(turnOfTv3);
+        api.executeAction();
+
+        api.setAction(turnOfTv4);
+        api.executeAction();
+
+        api.setAction(turnOfTv5);
+        api.executeAction();
+
+        api.setAction(turnOfTv6);
+        api.executeAction();
+
+        api.setAction(turnOfStove1);
+        api.executeAction();
+
+        api.setAction(turnOfStove2);
+        api.executeAction();
+
+        api.setAction(loadProductMeat);
+        api.executeAction();
+
+        api.setAction(loadProductMilk);
+        api.executeAction();
+
+        api.setAction(loadProductBread);
+        api.executeAction();
+
+        api.setAction(loadProductBread2);
+        api.executeAction();
+
+        api.setAction(turnOffComputer1);
+        api.executeAction();
+
+        api.setAction(turnOffComputer2);
+        api.executeAction();
+
+        api.setAction(turnOffComputer3);
+        api.executeAction();
+
+        api.setAction(turnOffComputer4);
+        api.executeAction();
+
+        api.setAction(turnOffComputer5);
+        api.executeAction();
+
+        api.setAction(turnOffComputer6);
+        api.executeAction();
+
+        api.setAction(turnOnComputer);
+        api.executeAction();
+
+        api.setAction(turnOnStove);
+        api.executeAction();
+
+        api.setAction(checkKitchenTemperature);
+        api.executeAction();
+
+        api.setAction(checkLivingRoomTemperature);
+        api.executeAction();
+
+        api.setAction(checkDinningRoomTemperature);
+        api.executeAction();
+
+        api.setAction(checkParentsRoomTemperature);
+        api.executeAction();
+
+        api.setAction(checkOscarRoomTemperature);
+        api.executeAction();
+
+        api.setAction(checkMiaRoomTemperature);
+        api.executeAction();
+
+        api.setAction(checkMaxRoomTemperature);
+        api.executeAction();
+
+        api.setAction(checkSophiaRoomTemperature);
+        api.executeAction();
+
+        api.setAction(checkOfficeTemperature);
+        api.executeAction();
+
+        api.setAction(turnOnTv);
+        api.executeAction();
+
+        System.out.println(reportGenerator.generateReport());
+        reportGenerator.setReportStrategy(eventReportStrategy);
+        System.out.println(reportGenerator.generateReport());
+
+        // Execute consumptionReportStrategy
+        reportGenerator.setReportStrategy(consumptionReportStrategy);
+
+        // warnings ///////////////////////////////////////////////////
+
+        Thread.sleep(1000); // 1 sec
+
+        ///////////////////////////////////////////////////////////////
+
+        System.out.println(reportGenerator.generateReport());
+
+        // report houseConfigurationReport
+        System.out.println(houseConfigurationReport.generateReport());
     }
 }
