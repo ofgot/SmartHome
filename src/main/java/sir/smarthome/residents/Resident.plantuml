@@ -1,0 +1,383 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class ActivityReportStrategy {
+  + ActivityReportStrategy(): 
+  - data: Map<Resident, Map<Device, Integer>>
+  + generateReport(): String
+   data: Map<Resident, Map<Device, Integer>>
+}
+class Animal {
+  + Animal(String): 
+}
+class BaseAction<R, E> {
+  + BaseAction(R, E): 
+  # receiver: R
+  # executor: E
+  + toString(): String
+   receiver: R
+   executor: E
+}
+class Building {
+  + Building(String): 
+  - name: String
+  + removeComponent(HouseComponent): void
+  + appendReport(StringBuilder): void
+  + addComponent(HouseComponent): void
+   components: List<HouseComponent>
+   name: String
+}
+class CheckTemperature {
+  + CheckTemperature(TemperatureSensor, HeatingSystemObserver): 
+  + execute(): void
+  + toString(): String
+}
+interface Command<R, E> << interface >> {
+  + toString(): String
+  + execute(): void
+   receiver: R
+   executor: E
+}
+class Common {
+  + Common(): 
+   temperature: int
+}
+class Computer {
+  + Computer(String, double): 
+  - lastTurnOn: Date
+  - condition: int
+  - usageDuration: double
+  - name: String
+  - id: UUID
+  - powerConsumption: double
+  + turnOn(): void
+  + turnOff(): void
+  + calculateUsageDuration(): void
+   name: String
+   condition: int
+   powerConsumption: double
+   id: UUID
+   lastTurnOn: Date
+   usageDuration: double
+   usageConsumption: double
+}
+class ComputerFactory {
+  - ComputerFactory(): 
+  - instance: ComputerFactory
+  + createDevice(double, String): Device
+   instance: ComputerFactory
+}
+class ConsumptionReportStrategy {
+  + ConsumptionReportStrategy(): 
+  - data: List<Device>
+  + generateReport(): String
+   data: List<Device>
+}
+class DecreaseVolumeAction {
+  + DecreaseVolumeAction(TV, Resident, int): 
+  + execute(): void
+  + toString(): String
+}
+interface Device << interface >> {
+  + turnOn(): void
+  + calculateUsageDuration(): void
+  + turnOff(): void
+   name: String
+   condition: int
+   powerConsumption: double
+   id: UUID
+   lastTurnOn: Date
+   usageDuration: double
+   usageConsumption: double
+}
+class DeviceApi {
+  + DeviceApi(ReportGenerator): 
+  - action: Command
+  + executeAction(): void
+   action: Command
+}
+class DeviceFactory {
+  + DeviceFactory(): 
+  + createDevice(double, String): Device
+}
+class Equipment {
+  + Equipment(String): 
+  - name: String
+   name: String
+}
+class Event {
+  + Event(String, Date, Command): 
+  - residentAndDevice: String
+  - action: Command
+  - date: Date
+   residentAndDevice: String
+   date: Date
+   action: Command
+}
+class EventReportStrategy {
+  + EventReportStrategy(): 
+  - data: List<Event>
+  + generateReport(): String
+   data: List<Event>
+}
+class Floor {
+  + Floor(String): 
+  - name: String
+  + removeComponent(HouseComponent): void
+  + addComponent(HouseComponent): void
+  + appendReport(StringBuilder): void
+   components: List<HouseComponent>
+   name: String
+}
+class Fridge {
+  + Fridge(String, double): 
+  - name: String
+  - lastTurnOn: Date
+  - id: UUID
+  - condition: int
+  - powerConsumption: double
+  - usageDuration: double
+  + calculateUsageDuration(): void
+  + takeProduct(Product): Product
+  + turnOff(): void
+  + loadProduct(Product): void
+  + turnOn(): void
+   name: String
+   condition: int
+   powerConsumption: double
+   id: UUID
+   lastTurnOn: Date
+   usageDuration: double
+   usageConsumption: double
+}
+class FridgeFactory {
+  - FridgeFactory(): 
+  - instance: FridgeFactory
+  + createDevice(double, String): Device
+   instance: FridgeFactory
+}
+class HeatingSystemObserver {
+  + HeatingSystemObserver(): 
+  + toString(): String
+  + turnOffHeatingSystem(): void
+  + update(int): void
+}
+interface HouseComponent << interface >> {
+  + appendReport(StringBuilder): void
+  + addComponent(HouseComponent): void
+  + removeComponent(HouseComponent): void
+   components: List<HouseComponent>
+   name: String
+}
+class HouseConfigurationReport {
+  + HouseConfigurationReport(Building): 
+  + generateReport(): String
+}
+class HouseholdAppliancesFactory {
+  + HouseholdAppliancesFactory(): 
+}
+class Human {
+  + Human(String): 
+}
+class IncreaseVolumeAction {
+  + IncreaseVolumeAction(TV, Resident, int): 
+  + toString(): String
+  + execute(): void
+}
+class LoadProductAction {
+  + LoadProductAction(Fridge, Resident, Product): 
+  + toString(): String
+  + execute(): void
+}
+class Main {
+  + Main(): 
+  + main(String[]): void
+}
+class MultimediaFactory {
+  - MultimediaFactory(): 
+  - instance: MultimediaFactory
+  + createDevice(double, String): Device
+   instance: MultimediaFactory
+}
+interface Observer << interface >> {
+  + update(int): void
+}
+class Product {
+  + Product(String): 
+  - name: String
+   name: String
+}
+class ReportGenerator {
+  + ReportGenerator(ReportStrategy): 
+  - reportStrategy: ReportStrategy
+  + registerCommand(Command): void
+  + generateReport(): String
+   reportStrategy: ReportStrategy
+}
+interface ReportStrategy << interface >> {
+  + generateReport(): String
+}
+class Resident {
+  + Resident(String, ResidentType): 
+  - id: UUID
+  - name: String
+  - type: ResidentType
+   name: String
+   id: UUID
+   type: ResidentType
+}
+enum ResidentType << enumeration >> {
+  + ResidentType(): 
+  + values(): ResidentType[]
+  + valueOf(String): ResidentType
+}
+class Room {
+  + Room(String): 
+  - equipment: List<Equipment>
+  - name: String
+  + removeDevice(Device): void
+  + removeComponent(HouseComponent): void
+  + addComponent(HouseComponent): void
+  + addDevice(Device): void
+  + addEquipment(Equipment): void
+  + removeEquipment(Equipment): void
+  + appendReport(StringBuilder): void
+  + addResident(Resident): void
+  + removeResident(Resident): void
+   components: List<HouseComponent>
+   name: String
+   equipment: List<Equipment>
+}
+class SensorFactory {
+  - SensorFactory(): 
+  - instance: SensorFactory
+  + createDevice(double, String): Device
+   instance: SensorFactory
+}
+class SmartHomeApplication {
+  + SmartHomeApplication(): 
+  + run(Integer): void
+  + firstConfig(): void
+  + secondConfig(): void
+}
+class Stove {
+  + Stove(String, double): 
+  - lastTurnOn: Date
+  - name: String
+  - id: UUID
+  - powerConsumption: double
+  - usageDuration: double
+  - condition: int
+  + calculateUsageDuration(): void
+  + turnOff(): void
+  + turnOn(): void
+   name: String
+   condition: int
+   powerConsumption: double
+   id: UUID
+   lastTurnOn: Date
+   usageDuration: double
+   usageConsumption: double
+}
+class StoveFactory {
+  - StoveFactory(): 
+  - instance: StoveFactory
+  + createDevice(double, String): Device
+   instance: StoveFactory
+}
+class TV {
+  + TV(String, double): 
+  - lastTurnOn: Date
+  - id: UUID
+  - condition: int
+  - name: String
+  - usageDuration: double
+  - powerConsumption: double
+  + turnOff(): void
+  + changeChannel(): void
+  + calculateUsageDuration(): void
+  + increaseVolume(int): void
+  + turnOn(): void
+  + decreaseVolume(int): void
+   name: String
+   condition: int
+   powerConsumption: double
+   id: UUID
+   lastTurnOn: Date
+   usageDuration: double
+   usageConsumption: double
+}
+class TakeProductAction {
+  + TakeProductAction(Fridge, Resident, Product): 
+  + execute(): void
+  + toString(): String
+}
+class TemperatureSensor {
+  + TemperatureSensor(String, double): 
+  - observers: List<Observer>
+  - usageDuration: double
+  - lastTurnOn: Date
+  - powerConsumption: double
+  - temperature: int
+  - id: UUID
+  - condition: int
+  - name: String
+  + addObserver(Observer): void
+  + turnOff(): void
+  - notifyObservers(): void
+  + calculateUsageDuration(): void
+  + turnOn(): void
+  + removeObserver(Observer): void
+   name: String
+   condition: int
+   temperature: int
+   observers: List<Observer>
+   powerConsumption: double
+   id: UUID
+   lastTurnOn: Date
+   usageDuration: double
+   usageConsumption: double
+}
+class TurnOffDeviceAction {
+  + TurnOffDeviceAction(Device, Resident): 
+  + execute(): void
+  + toString(): String
+}
+class TurnOnDeviceAction {
+  + TurnOnDeviceAction(Device, Resident): 
+  + execute(): void
+  + toString(): String
+}
+
+ActivityReportStrategy      -[#008200,dashed]-^  ReportStrategy             
+Animal                      -[#000082,plain]-^  Resident                   
+BaseAction                  -[#008200,dashed]-^  Command                    
+Building                    -[#008200,dashed]-^  HouseComponent             
+CheckTemperature            -[#000082,plain]-^  BaseAction                 
+Computer                    -[#008200,dashed]-^  Device                     
+ComputerFactory             -[#000082,plain]-^  HouseholdAppliancesFactory 
+ConsumptionReportStrategy   -[#008200,dashed]-^  ReportStrategy             
+DecreaseVolumeAction        -[#000082,plain]-^  BaseAction                 
+EventReportStrategy         -[#008200,dashed]-^  ReportStrategy             
+Floor                       -[#008200,dashed]-^  HouseComponent             
+Fridge                      -[#008200,dashed]-^  Device                     
+FridgeFactory               -[#000082,plain]-^  HouseholdAppliancesFactory 
+HeatingSystemObserver       -[#008200,dashed]-^  Observer                   
+HouseholdAppliancesFactory  -[#000082,plain]-^  DeviceFactory              
+Human                       -[#000082,plain]-^  Resident                   
+IncreaseVolumeAction        -[#000082,plain]-^  BaseAction                 
+LoadProductAction           -[#000082,plain]-^  BaseAction                 
+MultimediaFactory           -[#000082,plain]-^  DeviceFactory              
+Room                        -[#008200,dashed]-^  HouseComponent             
+SensorFactory               -[#000082,plain]-^  DeviceFactory              
+Stove                       -[#008200,dashed]-^  Device                     
+StoveFactory                -[#000082,plain]-^  HouseholdAppliancesFactory 
+TV                          -[#008200,dashed]-^  Device                     
+TakeProductAction           -[#000082,plain]-^  BaseAction                 
+TemperatureSensor           -[#008200,dashed]-^  Device                     
+TurnOffDeviceAction         -[#000082,plain]-^  BaseAction                 
+TurnOnDeviceAction          -[#000082,plain]-^  BaseAction                 
+@enduml
