@@ -1,0 +1,51 @@
+@startuml usecase
+'https://plantuml.com/use-case-diagram
+
+!pragma teoz true
+!theme plain
+
+skinparam noteTextAlignment center
+skinparam linetype ortho
+
+header
+SmartHome  diagram
+Author - khometym@fel.cvut.cz
+Version 1.0.0
+end header
+
+actor Resident
+actor Animal <<Resident>>
+actor Human <<Resident>>
+
+Animal --|> Resident
+Human --|> Resident
+
+rectangle SmartHome {
+    actor Device
+    actor Fridge <<Device>>
+    actor TV <<Device>>
+    actor TemperatureSensor <<Device>>
+
+    Fridge --|> Device
+    TV --|> Device
+    TemperatureSensor --|> Device
+
+    actor Observer
+    actor HeatingSystemObserver <<Observer>>
+}
+
+HeatingSystemObserver --|> Observer
+
+rectangle System {
+    Resident --> (Turn on device)
+    Resident --> (Turn off device)
+    Resident --> (Take product from fridge)
+    Resident --> (Load product to fridge)
+    Resident --> (Increase TV volume)
+    Resident --> (Decrease TV volume)
+    HeatingSystemObserver --> (Check temperature)
+}
+
+
+
+@enduml
