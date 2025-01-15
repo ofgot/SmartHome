@@ -4,7 +4,7 @@ import sir.smarthome.common.Common;
 import sir.smarthome.devices.TemperatureSensor;
 import sir.smarthome.observers.HeatingSystemObserver;
 
-public class CheckTemperature extends BaseAction<TemperatureSensor, HeatingSystemObserver>{
+public class CheckTemperature extends BaseAction<TemperatureSensor, HeatingSystemObserver> {
 
     public CheckTemperature(TemperatureSensor receiver, HeatingSystemObserver executor) {
         super(receiver, executor);

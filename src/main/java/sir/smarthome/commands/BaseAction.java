@@ -8,15 +8,15 @@ public abstract class BaseAction<R, E> implements Command {
         this.receiver = receiver;
         this.executor = executor;
     }
-    
+
     public R getReceiver() {
         return receiver;
     }
-    
+
     public E getExecutor() {
         return executor;
     }
-    
+
     @Override
     public String toString() {
         return receiver.getClass().getName() + " by " + executor.getClass().getName();
