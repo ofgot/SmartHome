@@ -2,19 +2,22 @@ package sir.smarthome.observers;
 
 import sir.smarthome.common.Common;
 
+import java.util.logging.Logger;
+
 public class HeatingSystemObserver implements Observer {
+    private static final Logger logger = Logger.getLogger(HeatingSystemObserver.class.getName());
 
     @Override
     public void update(int temperature) {
         if (temperature > Common.TEMPERATURE_BORDER_LINE) {
             turnOffHeatingSystem();
         } else {
-            System.out.println("Heating system is on.");
+            logger.info("Heating system is on.");
         }
     }
 
     public void turnOffHeatingSystem() {
-        System.out.println("Heating system turned off.");
+        logger.info("Heating system turned off.");
     }
 
     @Override

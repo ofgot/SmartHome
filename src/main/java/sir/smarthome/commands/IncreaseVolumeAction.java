@@ -1,14 +1,17 @@
 package sir.smarthome.commands;
 
+import sir.smarthome.SmartHomeApplication;
 import sir.smarthome.devices.TV;
 import sir.smarthome.residents.Resident;
+
+import java.util.logging.Logger;
 
 /**
  * Represents an action to increase the volume of a {@link TV}.
  * This action is performed by a {@link Resident} and increases the volume by a specified amount.
  */
 public class IncreaseVolumeAction extends BaseAction<TV, Resident> {
-
+    private static final Logger logger = Logger.getLogger(IncreaseVolumeAction.class.getName());
     /**
      * The amount by which the volume will be increased.
      */
@@ -33,7 +36,7 @@ public class IncreaseVolumeAction extends BaseAction<TV, Resident> {
      */
     @Override
     public void execute() {
-        System.out.println("Increase volume to " + amount);
+        logger.info("Increase volume to " + amount);
         receiver.increaseVolume(amount);
     }
 

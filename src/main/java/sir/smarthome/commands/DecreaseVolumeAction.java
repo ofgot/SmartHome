@@ -1,13 +1,17 @@
 package sir.smarthome.commands;
 
+import sir.smarthome.SmartHomeApplication;
 import sir.smarthome.devices.TV;
 import sir.smarthome.residents.Resident;
+
+import java.util.logging.Logger;
 
 /**
  * Represents an action to decrease the volume of a {@link TV}.
  * This action is performed by a {@link Resident} and reduces the volume by a specified amount.
  */
 public class DecreaseVolumeAction extends BaseAction<TV, Resident> {
+    private static final Logger logger = Logger.getLogger(DecreaseVolumeAction.class.getName());
     /**
      * The amount by which the volume will be decreased.
      */
@@ -32,7 +36,7 @@ public class DecreaseVolumeAction extends BaseAction<TV, Resident> {
      */
     @Override
     public void execute() {
-        System.out.println("Decrease volume to " + amount);
+        logger.info("Decrease volume to " + amount);
         receiver.decreaseVolume(amount);
     }
 

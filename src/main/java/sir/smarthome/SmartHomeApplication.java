@@ -10,7 +10,11 @@ import sir.smarthome.observers.HeatingSystemObserver;
 import sir.smarthome.reports.*;
 import sir.smarthome.residents.*;
 
+import java.util.logging.Logger;
+
 public class SmartHomeApplication {
+    private static final Logger logger = Logger.getLogger(SmartHomeApplication.class.getName());
+
     /**
      * Executes a specific configuration based on the provided input.
      *
@@ -29,7 +33,7 @@ public class SmartHomeApplication {
                 secondConfig();
                 break;
             default:
-                System.out.println("Invalid input");
+                logger.info("Invalid input");
                 break;
         }
     }
@@ -331,9 +335,9 @@ public class SmartHomeApplication {
         api.setAction(administrationRoom3Temperature);
         api.executeAction();
 
-        System.out.println(reportGenerator.generateReport());
+        logger.info(reportGenerator.generateReport());
         reportGenerator.setReportStrategy(eventReportStrategy);
-        System.out.println(reportGenerator.generateReport());
+        logger.info(reportGenerator.generateReport());
 
         // Execute consumptionReportStrategy
         reportGenerator.setReportStrategy(consumptionReportStrategy);
@@ -344,10 +348,10 @@ public class SmartHomeApplication {
 
         ///////////////////////////////////////////////////////////////
 
-        System.out.println(reportGenerator.generateReport());
+        logger.info(reportGenerator.generateReport());
 
         // report houseConfigurationReport
-        System.out.println(houseConfigurationReport.generateReport());
+        logger.info(houseConfigurationReport.generateReport());
     }
 
     /// /// second config ==========================================================================================================
@@ -738,9 +742,9 @@ public class SmartHomeApplication {
         api.setAction(turnOnTv);
         api.executeAction();
 
-        System.out.println(reportGenerator.generateReport());
+        logger.info(reportGenerator.generateReport());
         reportGenerator.setReportStrategy(eventReportStrategy);
-        System.out.println(reportGenerator.generateReport());
+        logger.info(reportGenerator.generateReport());
 
         // Execute consumptionReportStrategy
         reportGenerator.setReportStrategy(consumptionReportStrategy);
@@ -751,9 +755,9 @@ public class SmartHomeApplication {
 
         ///////////////////////////////////////////////////////////////
 
-        System.out.println(reportGenerator.generateReport());
+        logger.info(reportGenerator.generateReport());
 
         // report houseConfigurationReport
-        System.out.println(houseConfigurationReport.generateReport());
+        logger.info(houseConfigurationReport.generateReport());
     }
 }

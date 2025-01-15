@@ -1,15 +1,18 @@
 package sir.smarthome.commands;
 
+import sir.smarthome.SmartHomeApplication;
 import sir.smarthome.common.Product;
 import sir.smarthome.devices.Fridge;
 import sir.smarthome.residents.Resident;
+
+import java.util.logging.Logger;
 
 /**
  * Represents an action to load a {@link Product} into a {@link Fridge}.
  * This action is performed by a {@link Resident} who loads a specific product into the fridge.
  */
 public class LoadProductAction extends BaseAction<Fridge, Resident> {
-
+    private static final Logger logger = Logger.getLogger(LoadProductAction.class.getName());
     /**
      * The product to be loaded into the fridge.
      */
@@ -34,7 +37,7 @@ public class LoadProductAction extends BaseAction<Fridge, Resident> {
      */
     @Override
     public void execute() {
-        System.out.println("Loading product");
+        logger.info("Loading product");
         receiver.loadProduct(product);
     }
 

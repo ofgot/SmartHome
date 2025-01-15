@@ -2,8 +2,11 @@ package sir.smarthome.devices;
 
 import java.io.DataOutput;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class TV extends Device {
+    private static final Logger logger = Logger.getLogger(TV.class.getName());
+
     public TV(String name, double powerConsumption) {
         this.id = UUID.randomUUID();
         this.name = name;
@@ -13,14 +16,14 @@ public class TV extends Device {
     }
 
     public void changeChannel() {
-        System.out.println("Channel changed.");
+        logger.info("Channel changed.");
     }
 
     public void increaseVolume(int increment) {
-        System.out.println("Volume increased by " + increment);
+        logger.info("Volume increased by " + increment);
     }
 
     public void decreaseVolume(int decrement) {
-        System.out.println("Volume decreased by " + decrement);
+        logger.info("Volume decreased by " + decrement);
     }
 }

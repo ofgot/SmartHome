@@ -1,14 +1,18 @@
 package sir.smarthome.commands;
 
+import sir.smarthome.SmartHomeApplication;
 import sir.smarthome.common.Common;
 import sir.smarthome.devices.TemperatureSensor;
 import sir.smarthome.observers.HeatingSystemObserver;
+
+import java.util.logging.Logger;
 
 /**
  * Represents an action to check and update the temperature using a {@link TemperatureSensor}.
  * This action retrieves the current temperature and updates the associated temperature sensor.
  */
 public class CheckTemperature extends BaseAction<TemperatureSensor, HeatingSystemObserver> {
+    private static final Logger logger = Logger.getLogger(CheckTemperature.class.getName());
 
     /**
      * Constructs a new {@code CheckTemperature} action with the specified receiver and executor.
@@ -28,7 +32,7 @@ public class CheckTemperature extends BaseAction<TemperatureSensor, HeatingSyste
      */
     @Override
     public void execute() {
-        System.out.println("Checking temperature");
+        logger.info("Checking temperature");
         receiver.setTemperature(Common.getTemperature());
     }
 

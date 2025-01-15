@@ -1,8 +1,12 @@
 package sir.smarthome.commands;
 
+import sir.smarthome.SmartHomeApplication;
 import sir.smarthome.reports.ReportGenerator;
 
+import java.util.logging.Logger;
+
 public class DeviceApi {
+    private static final Logger logger = Logger.getLogger(DeviceApi.class.getName());
     private Command action;
     private final ReportGenerator reportGenerator;
 
@@ -25,7 +29,7 @@ public class DeviceApi {
             reportGenerator.registerCommand(action);
             action.execute();
         } else {
-            System.out.println("No action set!");
+            logger.info("No action set!");
         }
     }
 }

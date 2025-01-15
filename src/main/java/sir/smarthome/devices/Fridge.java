@@ -1,10 +1,14 @@
 package sir.smarthome.devices;
 
+import sir.smarthome.SmartHomeApplication;
 import sir.smarthome.common.Product;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Fridge extends Device {
+    private static final Logger logger = Logger.getLogger(Fridge.class.getName());
+
     public Fridge(String name, double powerConsumption) {
         this.id = UUID.randomUUID();
         this.name = name;
@@ -14,11 +18,11 @@ public class Fridge extends Device {
     }
 
     public Product takeProduct(Product product) {
-        System.out.println("Product " + product.getName() + " taken from fridge.");
+        logger.info("Product " + product.getName() + " taken from fridge.");
         return product;
     }
 
     public void loadProduct(Product product) {
-        System.out.println("Product " + product.getName() + " loaded into fridge.");
+        logger.info("Product " + product.getName() + " loaded into fridge.");
     }
 }
