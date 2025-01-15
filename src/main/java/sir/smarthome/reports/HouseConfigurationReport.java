@@ -11,7 +11,7 @@ public class HouseConfigurationReport {
         }
         this.building = building;
     }
-
+    
     public String generateReport() {
         StringBuilder report = new StringBuilder();
         report.append("\nHouse Configuration Report\n");
