@@ -1,6 +1,5 @@
 package sir.smarthome.commands;
 
-import sir.smarthome.SmartHomeApplication;
 import sir.smarthome.reports.ReportGenerator;
 
 import java.util.logging.Logger;

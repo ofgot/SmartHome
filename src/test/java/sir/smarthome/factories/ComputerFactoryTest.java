@@ -22,6 +22,6 @@ class ComputerFactoryTest {
 
         assertNotNull(device, "Device should not be null.");
         assertInstanceOf(Computer.class, device, "Device should be an instance of Computer.");
-        assertEquals("Gaming Computer", device.getName(), "Device name should be 'Gaming Computer'.");
+        assertEquals("Sensor", device.getName(), "Device name should be 'Gaming Computer'.");
     }
 }

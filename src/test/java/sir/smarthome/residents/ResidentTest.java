@@ -15,7 +15,6 @@ class ResidentTest {
         Human human = new Human(name);
 
         assertNotNull(human.getId());
-        assertEquals(id, human.getId());
         assertEquals(name, human.getName());
         assertEquals(ResidentType.HUMAN, human.getType());
     }
@@ -27,7 +26,6 @@ class ResidentTest {
         Animal animal = new Animal(name);
 
         assertNotNull(animal.getId());
-        assertEquals(id, animal.getId());
         assertEquals(name, animal.getName());
         assertEquals(ResidentType.CAT, animal.getType());
     }

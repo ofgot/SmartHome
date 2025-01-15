@@ -6,11 +6,6 @@ import org.junit.jupiter.api.Test;
 import sir.smarthome.observers.HeatingSystemObserver;
 import sir.smarthome.observers.Observer;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class TemperatureSensorTests {
 
     @Test
