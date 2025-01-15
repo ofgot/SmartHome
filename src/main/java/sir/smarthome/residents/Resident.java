@@ -13,10 +13,6 @@ public abstract class Resident {
         this.type = type;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
