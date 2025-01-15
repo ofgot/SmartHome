@@ -1,12 +1,12 @@
 package sir.smarthome.observers;
 
+import sir.smarthome.common.Common;
+
 public class HeatingSystemObserver implements Observer {
-    private int temperature;
 
     @Override
     public void update(int temperature) {
-        this.temperature = temperature;
-        if (this.temperature > 22) {
+        if (temperature > Common.TEMPERATURE_BORDER_LINE) {
             turnOffHeatingSystem();
         } else {
             System.out.println("Heating system is on.");
