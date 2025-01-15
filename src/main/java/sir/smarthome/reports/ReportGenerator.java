@@ -74,19 +74,10 @@ public class ReportGenerator {
 
         // Track device usage by resident if the command is executed on a device by a resident
         if (command.getExecutor() instanceof Resident && command.getReceiver() instanceof Device) {
-            if (residentDeviceUsages.containsKey((Resident) command.getExecutor())) {
-                Map<Device, Integer> deviceUsages = residentDeviceUsages.get((Resident) command.getExecutor());
+            Resident executor = (Resident) command.getExecutor();
+            Device receiver = (Device) command.getReceiver();
 
-                if (deviceUsages.containsKey((Device) command.getReceiver())) {
-                    deviceUsages.compute((Device) command.getReceiver(), (k, usages) -> usages + 1);
-                } else {
-                    deviceUsages.put((Device) command.getReceiver(), 1);
-                }
-            } else {
-                HashMap<Device, Integer> deviceUsages = new HashMap<>();
-                deviceUsages.put((Device) command.getReceiver(), 1);
-                residentDeviceUsages.put((Resident) command.getExecutor(), deviceUsages);
-            }
+            residentDeviceUsages.computeIfAbsent(executor, Key -> new HashMap<>()).merge(receiver, 1, Integer::sum);
         }
     }
 
