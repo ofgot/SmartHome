@@ -14,6 +14,12 @@ public class DeviceApi {
         this.action = action;
     }
 
+    /**
+     * Executes the assigned action if it is set.
+     * <p>
+     * If an action is present, it registers the action with the report generator and executes it.
+     * If no action is set, a message is printed to indicate this.
+     */
     public void executeAction() {
         if (action != null) {
             reportGenerator.registerCommand(action);

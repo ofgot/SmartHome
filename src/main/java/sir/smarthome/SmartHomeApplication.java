@@ -11,9 +11,17 @@ import sir.smarthome.reports.*;
 import sir.smarthome.residents.*;
 
 public class SmartHomeApplication {
-
+    /**
+     * Executes a specific configuration based on the provided input.
+     *
+     * @param in the input integer that determines the configuration to execute.
+     *           - If the input is 1, the {@code firstConfig()} method is invoked.
+     *           - If the input is 2, the {@code secondConfig()} method is invoked.
+     *           - For any other input, an "Invalid input" message is printed to the console.
+     * @throws InterruptedException if the execution of a configuration is interrupted.
+     */
     public void run(Integer in) throws InterruptedException {
-        switch (in){
+        switch (in) {
             case 1:
                 firstConfig();
                 break;
@@ -26,6 +34,74 @@ public class SmartHomeApplication {
         }
     }
 
+    /**
+     * Configures the simulation environment by creating a building, residents, devices, and activities.
+     *
+     * <p>The configuration includes the following:</p>
+     *
+     * <h3>Building and Layout:</h3>
+     * <ul>
+     *   <li>A single building named "Cat Cafe" is created.</li>
+     *   <li>The building contains one floor with multiple rooms, including:
+     *       <ul>
+     *         <li>Kitchen</li>
+     *         <li>Living rooms</li>
+     *         <li>Administration office</li>
+     *         <li>Store room</li>
+     *         <li>Changing room</li>
+     *         <li>Restrooms (for men and women)</li>
+     *       </ul>
+     *   </li>
+     * </ul>
+     *
+     * <h3>Residents:</h3>
+     * <ul>
+     *   <li><b>Humans:</b> Six human residents are created with specific roles:
+     *       <ul>
+     *         <li>Cooks (e.g., Perdelko, Pepa)</li>
+     *         <li>Customers (e.g., Trpaslik, Permonik)</li>
+     *         <li>Owners (e.g., Dasa, Tim)</li>
+     *       </ul>
+     *   </li>
+     *   <li><b>Animals:</b> Seven animal residents (cats) are added to simulate a cafe environment.</li>
+     * </ul>
+     *
+     * <h3>Devices and Equipment:</h3>
+     * <ul>
+     *   <li>Devices like TVs, fridges, stoves, temperature sensors, and computers are created using factories.</li>
+     *   <li>Equipment such as a scratching post and bicycles are added to the store room.</li>
+     * </ul>
+     *
+     * <h3>Room Assignments:</h3>
+     * <ul>
+     *   <li>Devices and residents are assigned to specific rooms based on their roles and functions:
+     *       <ul>
+     *         <li>The kitchen contains fridges, stoves, a temperature sensor, and cooks.</li>
+     *         <li>Living rooms contain TVs, temperature sensors, animals, and customers.</li>
+     *         <li>The administration office contains computers, a temperature sensor, and owners.</li>
+     *       </ul>
+     *   </li>
+     * </ul>
+     *
+     * <h3>Observers and Actions:</h3>
+     * <ul>
+     *   <li>Temperature sensors are configured with observers to monitor and react to changes.</li>
+     *   <li>Commands for actions such as volume adjustments, product loading/unloading, and temperature checks are created and executed.</li>
+     * </ul>
+     *
+     * <h3>Reporting:</h3>
+     * <ul>
+     *   <li>Reports are generated using different strategies, including activity, consumption, and event reporting.</li>
+     *   <li>A house configuration report provides a summary of the building setup.</li>
+     * </ul>
+     *
+     * <h3>Simulation Execution:</h3>
+     * <ul>
+     *   <li>The configured environment is used to simulate real-world interactions, execute commands, and generate reports.</li>
+     * </ul>
+     *
+     * @throws InterruptedException if the thread is interrupted during the execution of the configuration.
+     */
     public void firstConfig() throws InterruptedException {
         // Residents
         // HUMAN
@@ -62,9 +138,9 @@ public class SmartHomeApplication {
 
         // TV
         Device tv1 = multimediaFactory.createDevice(100, "TV1");
-        Device tv2 = multimediaFactory.createDevice(200,"TV2");
-        Device tv3 = multimediaFactory.createDevice(200,"TV3");
-        Device tv4 = multimediaFactory.createDevice(200,"TV4");
+        Device tv2 = multimediaFactory.createDevice(200, "TV2");
+        Device tv3 = multimediaFactory.createDevice(200, "TV3");
+        Device tv4 = multimediaFactory.createDevice(200, "TV4");
 
         // Fridge
         Device fridge1 = fridgeFactory.createDevice(200, "Fridge1");
@@ -274,7 +350,86 @@ public class SmartHomeApplication {
         System.out.println(houseConfigurationReport.generateReport());
     }
 
-////// second config ==========================================================================================================
+    /// /// second config ==========================================================================================================
+    /**
+     * Configures a complex simulation environment featuring a residential house, devices, sensors,
+     * residents (both humans and animals), and various commands to simulate real-world activities.
+     *
+     * <h3>Residents:</h3>
+     * <ul>
+     *   <li><b>Humans:</b> A family of six individuals:
+     *       <ul>
+     *         <li>Father: Josef</li>
+     *         <li>Mother: Nadya</li>
+     *         <li>Children: Jakov, Svetlana, Vasiliy, Artem</li>
+     *       </ul>
+     *   </li>
+     *   <li><b>Animals:</b>
+     *       <ul>
+     *         <li>Hamster: Squeaky McSqueakface</li>
+     *         <li>Parrot: Sir Tweets-a-Lot</li>
+     *       </ul>
+     *   </li>
+     * </ul>
+     *
+     * <h3>Building Layout:</h3>
+     * <ul>
+     *   <li><b>Building:</b> Stalin's House</li>
+     *   <li><b>Floors:</b> Two floors</li>
+     *   <li><b>Rooms:</b>
+     *       <ul>
+     *         <li>Floor 1: Kitchen, Living Room, Office, Toilet 1</li>
+     *         <li>Floor 2: Bedrooms (Parents, Oscar, Mia, Max, Sophia), Store, Toilets 2 and 3</li>
+     *       </ul>
+     *   </li>
+     * </ul>
+     *
+     * <h3>Devices and Equipment:</h3>
+     * <ul>
+     *   <li>Devices include TVs, fridges, stoves, computers, and temperature sensors, created via factories.</li>
+     *   <li>Equipment includes bicycles and skis, stored in the store room.</li>
+     * </ul>
+     *
+     * <h3>Assignments:</h3>
+     * <ul>
+     *   <li>Rooms are populated with residents, devices, and sensors based on their purpose:
+     *       <ul>
+     *         <li>Kitchen: Stoves, fridges, a temperature sensor, and a TV.</li>
+     *         <li>Bedrooms: Computers, TVs, and temperature sensors, with residents assigned to specific rooms.</li>
+     *         <li>Office: Computers, a TV, and a temperature sensor.</li>
+     *       </ul>
+     *   </li>
+     * </ul>
+     *
+     * <h3>Observers and Sensors:</h3>
+     * <ul>
+     *   <li>Temperature sensors are assigned to key rooms and observed by a HeatingSystemObserver.</li>
+     * </ul>
+     *
+     * <h3>Reports:</h3>
+     * <ul>
+     *   <li>Various reports generated, including house configuration, consumption, activity, and event reports.</li>
+     * </ul>
+     *
+     * <h3>Commands and Actions:</h3>
+     * <ul>
+     *   <li>Commands simulate actions such as turning devices on/off, loading products into fridges, and checking room temperatures.</li>
+     *   <li>Commands are executed via a DeviceApi, which uses a configurable ReportGenerator to track activities.</li>
+     * </ul>
+     *
+     * <h3>Simulation Execution:</h3>
+     * <ul>
+     *   <li>Commands are sequentially executed, affecting the simulated environment and generating reports.</li>
+     *   <li>Delays (e.g., Thread.sleep) simulate real-world timing.</li>
+     * </ul>
+     *
+     * <h3>Outputs:</h3>
+     * <ul>
+     *   <li>Reports provide insights into house configuration, energy consumption, and activity tracking.</li>
+     * </ul>
+     *
+     * @throws InterruptedException if the thread is interrupted during the execution of the simulation.
+     */
     public void secondConfig() throws InterruptedException {
         // Residents
         // HUMAN
@@ -304,11 +459,11 @@ public class SmartHomeApplication {
 
         // TV
         Device tv1 = multimediaFactory.createDevice(10, "TV1");
-        Device tv2 = multimediaFactory.createDevice(20,"TV2");
-        Device tv3 = multimediaFactory.createDevice(15,"TV3");
-        Device tv4 = multimediaFactory.createDevice(20,"TV4");
-        Device tv5 = multimediaFactory.createDevice(10,"TV5");
-        Device tv6 = multimediaFactory.createDevice(20,"TV6");
+        Device tv2 = multimediaFactory.createDevice(20, "TV2");
+        Device tv3 = multimediaFactory.createDevice(15, "TV3");
+        Device tv4 = multimediaFactory.createDevice(20, "TV4");
+        Device tv5 = multimediaFactory.createDevice(10, "TV5");
+        Device tv6 = multimediaFactory.createDevice(20, "TV6");
 
         // Fridge
         Device fridge1 = fridgeFactory.createDevice(20, "Fridge1");
