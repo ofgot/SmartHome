@@ -8,7 +8,7 @@ The **SmartHome System** is a **Java-based simulation** of a smart home system w
 ## 📋 Features
 - 🌡 **Temperature Monitoring** – Automatically checks and adjusts home temperature.
 - 📺 **TV Volume Control** – Increase or decrease TV volume remotely.
-- ❄ **Smart Fridge Management** – Load and take products with ease.
+- ❄ **Smart Fridge Management** – Load and take products.
 - 🔌 **Device Control** – Turn devices on/off based on user input.
 - 📊 **Statistics Tracking** – Collect and analyze data on device usage and system interactions.
 
@@ -28,7 +28,3 @@ The system is designed using various **software design patterns** to ensure main
 
 ### 🎭 Use Case Diagram  
 <img width="1108" alt="Use Case Diagram" src="https://github.com/user-attachments/assets/4afc04f9-466b-4688-ab44-3b0881444e31" />
-
-## 🚀 Get Started
-To explore and contribute to the project, check out the repository:  
-🔗 [SmartHome GitHub Repository](https://github.com/ofgot/SmartHome)
