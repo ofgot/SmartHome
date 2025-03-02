@@ -3,7 +3,7 @@
 **Authors:** Daria Kuznetsova & Khomenko Tymofii  
 
 ## 📌 Overview
-The **SmartHome System** is a simulation designed to enhance home automation by integrating various smart devices and enabling seamless interaction between residents and automated systems. It also includes a **statistics module** to track and analyze system performance.
+The **SmartHome System** is a **Java-based simulation** of a smart home system with device management and automation. It improves home automation by connecting smart devices and allowing easy interaction between residents and automated systems. It also has a **statistics module** to track and analyze system performance.
 
 ## 📋 Features
 - 🌡 **Temperature Monitoring** – Automatically checks and adjusts home temperature.
