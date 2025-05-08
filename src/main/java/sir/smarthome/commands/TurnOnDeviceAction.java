@@ -1,25 +1,22 @@
 package sir.smarthome.commands;
 
-import sir.smarthome.devices.Device;
-import sir.smarthome.residents.Resident;
+import sir.smarthome.device_service.devices.Device;
 
 import java.util.logging.Logger;
 
 /**
  * Represents an action to turn on a {@link Device}.
- * This action is performed by a {@link Resident} who turns on the specified device.
  */
-public class TurnOnDeviceAction extends BaseAction<Device, Resident> {
+public class TurnOnDeviceAction extends BaseAction<Device> {
     private static final Logger logger = Logger.getLogger(TurnOnDeviceAction.class.getName());
 
     /**
      * Constructs a new {@code TurnOnDeviceAction} with the specified receiver and executor.
      *
      * @param receiver the {@link Device} to be turned on
-     * @param executor the {@link Resident} who initiates the action
      */
-    public TurnOnDeviceAction(Device receiver, Resident executor) {
-        super(receiver, executor);
+    public TurnOnDeviceAction(Device receiver) {
+        super(receiver);
     }
 
     /**
@@ -42,6 +39,6 @@ public class TurnOnDeviceAction extends BaseAction<Device, Resident> {
      */
     @Override
     public String toString() {
-        return "TurnOnDeviceAction by " + executor.getName() + " to: " + receiver.getName();
+        return "TurnOnDeviceAction to: " + receiver.getName();
     }
 }
