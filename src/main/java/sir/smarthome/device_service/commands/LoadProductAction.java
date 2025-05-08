@@ -1,4 +1,4 @@
-package sir.smarthome.commands;
+package sir.smarthome.device_service.commands;
 
 import sir.smarthome.common.Product;
 import sir.smarthome.device_service.devices.Fridge;
