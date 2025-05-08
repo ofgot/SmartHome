@@ -1,16 +1,13 @@
 package sir.smarthome.commands;
 
-import sir.smarthome.SmartHomeApplication;
-import sir.smarthome.devices.TV;
-import sir.smarthome.residents.Resident;
+import sir.smarthome.device_service.devices.TV;
 
 import java.util.logging.Logger;
 
 /**
  * Represents an action to decrease the volume of a {@link TV}.
- * This action is performed by a {@link Resident} and reduces the volume by a specified amount.
  */
-public class DecreaseVolumeAction extends BaseAction<TV, Resident> {
+public class DecreaseVolumeAction extends BaseAction<TV> {
     private static final Logger logger = Logger.getLogger(DecreaseVolumeAction.class.getName());
     /**
      * The amount by which the volume will be decreased.
@@ -21,11 +18,10 @@ public class DecreaseVolumeAction extends BaseAction<TV, Resident> {
      * Constructs a new {@code DecreaseVolumeAction} with the specified receiver, executor, and volume decrease amount.
      *
      * @param receiver the {@link TV} on which the volume decrease will be performed
-     * @param executor the {@link Resident} who initiates the action
      * @param amount   the amount by which the volume will be decreased
      */
-    public DecreaseVolumeAction(TV receiver, Resident executor, int amount) {
-        super(receiver, executor);
+    public DecreaseVolumeAction(TV receiver, int amount) {
+        super(receiver);
         this.amount = amount;
     }
 
@@ -49,6 +45,6 @@ public class DecreaseVolumeAction extends BaseAction<TV, Resident> {
      */
     @Override
     public String toString() {
-        return "DecreaseVolumeAction by " + executor.getName() + " to " + receiver.getName() + " with amount: " + amount;
+        return "DecreaseVolumeAction " + "to " + receiver.getName() + " with amount: " + amount;
     }
 }

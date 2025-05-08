@@ -1,9 +1,10 @@
 package sir.smarthome.house.component;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sir.smarthome.common.Equipment;
-import sir.smarthome.devices.Device;
-import sir.smarthome.residents.Resident;
+import sir.smarthome.house_service.component.Building;
+import sir.smarthome.house_service.component.Floor;
+import sir.smarthome.house_service.component.HouseComponent;
+import sir.smarthome.house_service.component.Room;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,13 +64,11 @@ public class HouseComponentTest {
                 Room: Room 101
                   No devices
                   No equipment
-                  No residents
                 ==========================
                 Floor: Second Floor
                 Room: Room 102
                   No devices
                   No equipment
-                  No residents
                 """.strip();
 
         assertEquals(expectedReport, report.toString().strip(), "Report should match expected structure");

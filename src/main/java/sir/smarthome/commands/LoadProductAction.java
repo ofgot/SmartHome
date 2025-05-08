@@ -1,17 +1,14 @@
 package sir.smarthome.commands;
 
-import sir.smarthome.SmartHomeApplication;
 import sir.smarthome.common.Product;
-import sir.smarthome.devices.Fridge;
-import sir.smarthome.residents.Resident;
+import sir.smarthome.device_service.devices.Fridge;
 
 import java.util.logging.Logger;
 
 /**
  * Represents an action to load a {@link Product} into a {@link Fridge}.
- * This action is performed by a {@link Resident} who loads a specific product into the fridge.
  */
-public class LoadProductAction extends BaseAction<Fridge, Resident> {
+public class LoadProductAction extends BaseAction<Fridge> {
     private static final Logger logger = Logger.getLogger(LoadProductAction.class.getName());
     /**
      * The product to be loaded into the fridge.
@@ -22,11 +19,10 @@ public class LoadProductAction extends BaseAction<Fridge, Resident> {
      * Constructs a new {@code LoadProductAction} with the specified receiver, executor, and product.
      *
      * @param receiver the {@link Fridge} where the product will be loaded
-     * @param executor the {@link Resident} who initiates the action
      * @param product  the {@link Product} to be loaded into the fridge
      */
-    public LoadProductAction(Fridge receiver, Resident executor, Product product) {
-        super(receiver, executor);
+    public LoadProductAction(Fridge receiver, Product product) {
+        super(receiver);
         this.product = product;
     }
 
@@ -50,6 +46,6 @@ public class LoadProductAction extends BaseAction<Fridge, Resident> {
      */
     @Override
     public String toString() {
-        return "LoadProductAction by " + executor.getName() + " with product: " + product.getName();
+        return "LoadProductAction with product: " + product.getName();
     }
 }
