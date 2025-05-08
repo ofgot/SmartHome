@@ -2,7 +2,6 @@ package sir.smarthome.device_service.factories;
 
 import sir.smarthome.device_service.devices.Device;
 import sir.smarthome.device_service.devices.TV;
-import sir.smarthome.devices.*;
 
 public class MultimediaFactory extends DeviceFactory {
     private static MultimediaFactory instance;

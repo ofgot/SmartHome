@@ -16,11 +16,6 @@ public class Fridge extends Device {
         this.condition = 100;
     }
 
-    public Product takeProduct(Product product) {
-        logger.info("Product " + product.getName() + " taken from fridge.");
-        return product;
-    }
-
     public void loadProduct(Product product) {
         logger.info("Product " + product.getName() + " loaded into fridge.");
     }
