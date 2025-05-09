@@ -15,6 +15,10 @@ public class DeviceService {
     private final DeviceFactory stoveFactory = StoveFactory.getInstance();
     private final DeviceApi deviceApi = new DeviceApi();
 
+    public DeviceService( ) {
+
+    }
+
     public Device createDevice(String name, double power, String type) {
         Device device;
 
@@ -38,9 +42,8 @@ public class DeviceService {
     public void turnOnDevice(UUID id) {
         Device device = devices.get(id);
         if (device != null) {
-            DeviceApi api = new DeviceApi();
-            api.setAction(new TurnOnDeviceAction(device));
-            api.executeAction();
+            deviceApi.setAction(new TurnOnDeviceAction(device));
+            deviceApi.executeAction();
         } else {
             System.err.println("Device not found: " + id);
         }
@@ -49,9 +52,8 @@ public class DeviceService {
     public void turnOffDevice(UUID id) {
         Device device = devices.get(id);
         if (device != null) {
-            DeviceApi api = new DeviceApi();
-            api.setAction(new TurnOffDeviceAction(device));
-            api.executeAction();
+            deviceApi.setAction(new TurnOffDeviceAction(device));
+            deviceApi.executeAction();
         } else {
             System.err.println("Device not found: " + id);
         }
