@@ -1,0 +1,43 @@
+package sir.smarthome.house_service.model;
+
+import sir.smarthome.common.Equipment;
+import sir.smarthome.device_service.devices.Device;
+
+import java.util.*;
+
+public class Room  {
+    private final UUID id;
+    private final String name;
+    private final UUID buildingId;
+    private final int floorNumber;
+        private final List<UUID> devices = new ArrayList<>();
+
+    public Room(UUID id, String name, UUID buildingId, int floorNumber) {
+        this.id = id;
+        this.name = name;
+        this.buildingId = buildingId;
+        this.floorNumber = floorNumber;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<UUID> getDeviceIds() {
+        return Collections.unmodifiableList(devices);
+    }
+
+    public void addDevice(UUID deviceId) {
+        devices.add(Objects.requireNonNull(deviceId, "deviceId"));
+    }
+
+
+    public void removeDevice(UUID deviceId) {
+        devices.remove(deviceId);
+    }
+
+}
