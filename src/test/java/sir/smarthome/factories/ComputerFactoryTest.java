@@ -1,8 +1,10 @@
 package sir.smarthome.factories;
 
 import org.junit.jupiter.api.Test;
-import sir.smarthome.devices.Computer;
-import sir.smarthome.devices.Device;
+import sir.smarthome.device_service.devices.Computer;
+import sir.smarthome.device_service.devices.Device;
+import sir.smarthome.device_service.factories.ComputerFactory;
+import sir.smarthome.device_service.factories.DeviceFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
