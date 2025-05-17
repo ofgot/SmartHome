@@ -1,6 +1,6 @@
 package sir.smarthome.device_service.reports;
 
-import sir.smarthome.commands.Command;
+import sir.smarthome.device_service.commands.Command;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package sir.smarthome.commands;
+package sir.smarthome.device_service.commands;
 
 public abstract class BaseAction<R> implements Command {
     protected R receiver;
