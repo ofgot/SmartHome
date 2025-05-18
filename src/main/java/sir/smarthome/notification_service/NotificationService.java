@@ -1,5 +1,7 @@
 package sir.smarthome.notification_service;
 
+import sir.smarthome.common.LoggingInterceptor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class NotificationService implements NotificationSubject{
     public void notifyObservers(String topic, String message) {
         for (NotificationObserver observer : observers) {
             observer.notify(topic, message);
+            LoggingInterceptor.log("NotificationService", "Sending notification to observers: " + message);
+
         }
     }
 
