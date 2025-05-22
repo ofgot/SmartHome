@@ -1,5 +1,6 @@
 package sir.smarthome.device_service;
 
+import co.elastic.clients.elasticsearch.core.IndexRequest;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import sir.smarthome.common.LoggingInterceptor;
@@ -18,8 +19,11 @@ import java.util.concurrent.TimeUnit;
 public class DeviceServiceApp {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         DeviceService service = new DeviceService();
+        ElasticService elasticService = new ElasticService();
+        elasticService.createIndexIfNotExists("devices");
+
         try {
             new DeviceRestApi(service).start();
         } catch (IOException e) {
@@ -53,6 +57,18 @@ public class DeviceServiceApp {
                         LoggingInterceptor.log("DeviceServiceApp", "Creating device: " + name + " (" + type + "), power: " + power + ", roomId: " + roomId);
 
                         Device device = service.createDevice(name, power, type, roomId);
+                        device.setRoomId(roomId);
+                        elasticService.getClient().index(IndexRequest.of(i -> i
+                                .index("devices")
+                                .id(device.getId().toString())
+                                .document(Map.of(
+                                        "name", device.getName(),
+                                        "type", device.getClass().getSimpleName(),
+                                        "status", "OFF", // если нет поля — можешь убрать
+                                        "roomId", device.getRoomId().toString()
+                                ))
+                        ));
+
                         System.out.println("Created device: " + device.getId() + " (" + name + ")");
                     }
                     case "list" -> {

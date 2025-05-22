@@ -8,6 +8,7 @@ import sir.smarthome.device_service.commands.*;
 import sir.smarthome.device_service.devices.*;
 import sir.smarthome.device_service.factories.*;
 import sir.smarthome.device_service.kafka.SimpleKafkaProducer;
+import sir.smarthome.elasticsearch.DeviceIndexer;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +21,8 @@ public class DeviceService {
     private final DeviceFactory stoveFactory = StoveFactory.getInstance();
     private final DeviceApi deviceApi = new DeviceApi();
     private final SimpleKafkaProducer producer = new SimpleKafkaProducer();
+    private final DeviceIndexer indexer = new DeviceIndexer();
+
 
     private final Cache<UUID, Device> deviceCache = CacheBuilder.newBuilder()
             .expireAfterWrite(10, TimeUnit.MINUTES)
@@ -118,14 +121,15 @@ public class DeviceService {
     public Device getDeviceById(UUID id) {
         Device cached = deviceCache.getIfPresent(id);
         if (cached != null) {
-            //System.out.println("💾 [CACHE HIT] Device " + id);
+            //System.out.println("[CACHE HIT] Device " + id);
             return cached;
         }
 
         Device device = devices.get(id);
         if (device != null) {
             deviceCache.put(id, device);
-            //System.out.println("📥 [CACHE PUT] Device " + id);
+            indexer.index(device);
+            //System.out.println("[CACHE PUT] Device " + id);
         }
         return device;
     }
