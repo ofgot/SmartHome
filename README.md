@@ -1,30 +1,56 @@
-# 🏡 SmartHome System
+# 🏡 A Microservice-Based Smart Home Control System
 
-**Authors:** Daria Kuznetsova & Khomenko Tymofii  
+**Authors:**
+- Daria Kuznetsova  
+- Kseniia Shkolnaia  
+- Diana Arnautova  
+- Sofia Grechishkina
 
-## 📌 Overview
-The **SmartHome System** is a **Java-based simulation** of a smart home system with device management and automation. It improves home automation by connecting smart devices and allowing easy interaction between residents and automated systems. It also has a **statistics module** to track and analyze system performance.
+### 📌 Application Description and Motivation for Redesign
 
-## 📋 Features
-- 🌡 **Temperature Monitoring** – Automatically checks and adjusts home temperature.
-- 📺 **TV Volume Control** – Increase or decrease TV volume remotely.
-- ❄ **Smart Fridge Management** – Load and take products.
-- 🔌 **Device Control** – Turn devices on/off based on user input.
-- 📊 **Statistics Tracking** – Collect and analyze data on device usage and system interactions.
+📊 **Description:**
 
-## 🎭 Design Patterns Used
-The system is designed using various **software design patterns** to ensure maintainability, scalability, and efficiency:
-- 🔄 **Observer Pattern** – Used for monitoring system changes, such as temperature adjustments.
-- 🏗 **Factory Method Pattern** – Manages the creation of smart home devices dynamically.
-- 🎭 **Singleton Pattern** – Ensures a single instance of key system components (e.g., statistics manager).
-- 🔌 **Command Pattern** – Allows encapsulating smart home device operations (turning on/off, adjusting settings) as commands.
-- 🌳 **Composite Pattern** – Organizes smart home devices into hierarchical structures.
-- 🎯 **Strategy Pattern** – Enables flexible behavior selection for data collection(statistic).
-- ⏳ **Lazy Initialization** – Delays the creation of objects until they are actually needed, optimizing performance.
+Our project **SmartHome** is an application for managing a smart home. Through the app, users can turn devices on and off, monitor their status, and track energy consumption. The system does **not simulate residents or daily life**, but rather focuses on **practical real-time interaction with smart devices**.
 
-## 📜 Diagrams
-### 📌 Class Diagram  
-![Class Diagram](https://github.com/user-attachments/assets/1012b686-dd6a-4ea4-96c7-2b468319b624)
+The system models the household with buildings, floors, rooms, and devices (e.g. TVs, computers, refrigerators). Users interact with devices through a clear interface while the system collects data on device usage and energy consumption.
 
-### 🎭 Use Case Diagram  
-<img width="1108" alt="Use Case Diagram" src="https://github.com/user-attachments/assets/4afc04f9-466b-4688-ab44-3b0881444e31" />
+The system is designed using a **microservice architecture**, where each domain (e.g., devices, household structure, reports) is implemented as an independent service. Communication between services is done via REST APIs.
+
+🎯 **Motivation for Redesign:**
+
+- The original system was monolithic and difficult to maintain.
+- We aim to improve **modularity, scalability, and fault tolerance**.
+- A microservice approach enables **parallel team development** and independent deployment of system components.
+- The result is a strong foundation for a **real-world IoT application**.
+- This phase **does not include device failures or repair logic** – it focuses on basic control and energy tracking.
+
+### 📋 Functional Requirements
+
+1. View household structure (buildings, floors, rooms).
+2. View list of devices in a room.
+3. Turn on a device.
+4. Turn off a device.
+5. View device energy consumption.
+6. Add a new device to a room.
+7. Create a new household.
+
+### 🎭 Non-Functional Requirements
+
+1. The application must be available 24/7.
+2. Each domain is implemented as a separate microservice.
+3. REST API is used for communication between services.
+4. Energy consumption data is stored for analytical purposes.
+5. The system is secure, extendable, and scalable.
+
+## 📦 Diagrams
+### Class Diagram  
+![Class Diagram]()
+
+### Use Case Diagram  
+![Use Case Diagram](docs/use%20case.png)
+
+### Component Diagram  
+![Component Diagram](docs/component%20diagram.png)
+
+### Sequence Diagram  
+![Sequence Diagram](docs/sequence%20diagram.png)

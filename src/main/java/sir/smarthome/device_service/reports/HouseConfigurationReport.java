@@ -1,6 +1,6 @@
 package sir.smarthome.device_service.reports;
 
-import sir.smarthome.house_service.component.Building;
+import sir.smarthome.house_service.model.Building;
 
 /**
  * Generates a configuration report for the house (building).
@@ -43,7 +43,7 @@ public class HouseConfigurationReport {
         report.append("==========================\n");
 
         // Append the building's configuration details to the report
-        building.appendReport(report);
+        //building.appendReport(report);
 
         report.append("==========================\n");
         return report.toString();

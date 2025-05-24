@@ -11,6 +11,15 @@ public abstract class Device {
     protected boolean isTurnedOn = true;
     protected Date lastTurnOn = new Date();
     protected int condition;
+    protected UUID roomId;
+
+    public UUID getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(UUID roomId) {
+        this.roomId = roomId;
+    }
 
     public UUID getId() {
         return id;
