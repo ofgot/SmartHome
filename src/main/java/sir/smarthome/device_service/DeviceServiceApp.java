@@ -1,26 +1,58 @@
 package sir.smarthome.device_service;
 
 import co.elastic.clients.elasticsearch.core.IndexRequest;
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import sir.smarthome.common.LoggingInterceptor;
 import sir.smarthome.common.Product;
-import sir.smarthome.device_service.controller.DeviceService;
+import sir.smarthome.device_service.factories.ComputerFactory;
+import sir.smarthome.device_service.factories.DeviceFactory;
+import sir.smarthome.device_service.service.DeviceService;
 import sir.smarthome.device_service.devices.Device;
 import sir.smarthome.rest.DeviceRestApi;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.cache.Cache;
+import sir.smarthome.DeviceRepository;
+import sir.smarthome.device_service.commands.*;
+import sir.smarthome.device_service.factories.*;
+import sir.smarthome.device_service.kafka.SimpleKafkaProducer;
+import sir.smarthome.elasticsearch.DeviceIndexer;
+
+
 public class DeviceServiceApp {
 
-
     public static void main(String[] args) throws IOException {
-        DeviceService service = new DeviceService();
+
+        System.out.println("=== SmartHome Device Service ===");
+        DeviceFactory computerFactory = ComputerFactory.getInstance();
+        DeviceFactory fridgeFactory = FridgeFactory.getInstance();
+        DeviceFactory multimediaFactory = MultimediaFactory.getInstance();
+        DeviceFactory stoveFactory = StoveFactory.getInstance();
+        DeviceApi deviceApi = new DeviceApi();
+        SimpleKafkaProducer producer = new SimpleKafkaProducer();
+        DeviceIndexer indexer = new DeviceIndexer();
+        DeviceRepository deviceRepository = new DeviceRepository();
+        Cache<UUID, Device> cache = CacheBuilder.newBuilder()
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .maximumSize(100)
+                .build();
+
+        DeviceService service = new DeviceService(
+                computerFactory,
+                fridgeFactory,
+                multimediaFactory,
+                stoveFactory,
+                deviceApi,
+                producer,
+                indexer,
+                cache,
+                deviceRepository
+        );
         ElasticService elasticService = new ElasticService();
         elasticService.createIndexIfNotExists("devices");
 
@@ -29,6 +61,7 @@ public class DeviceServiceApp {
         } catch (IOException e) {
             System.err.println("Failed to start REST API: " + e.getMessage());
         }
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("=== SmartHome Device Service ===");
 
