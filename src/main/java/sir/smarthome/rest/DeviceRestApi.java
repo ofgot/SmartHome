@@ -4,7 +4,7 @@ import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import sir.smarthome.common.BasicAuthFilter;
-import sir.smarthome.device_service.controller.DeviceService;
+import sir.smarthome.device_service.service.DeviceService;
 import sir.smarthome.device_service.devices.Device;
 
 import java.io.IOException;

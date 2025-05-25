@@ -1,7 +1,9 @@
-package sir.smarthome.device_service.controller;
+package sir.smarthome.device_service.service;
 
 import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sir.smarthome.DeviceRepository;
 import sir.smarthome.common.DeviceEventDTO;
 import sir.smarthome.common.Product;
 import sir.smarthome.device_service.commands.*;
@@ -11,40 +13,51 @@ import sir.smarthome.device_service.kafka.SimpleKafkaProducer;
 import sir.smarthome.elasticsearch.DeviceIndexer;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class DeviceService {
-    private final Map<UUID, Device> devices = new HashMap<>();
-    private final DeviceFactory computerFactory = ComputerFactory.getInstance();
-    private final DeviceFactory fridgeFactory = FridgeFactory.getInstance();
-    private final DeviceFactory multimediaFactory = MultimediaFactory.getInstance();
-    private final DeviceFactory stoveFactory = StoveFactory.getInstance();
-    private final DeviceApi deviceApi = new DeviceApi();
-    private final SimpleKafkaProducer producer = new SimpleKafkaProducer();
-    private final DeviceIndexer indexer = new DeviceIndexer();
+    private static final Logger logger = LoggerFactory.getLogger(DeviceService.class);
 
+    private final Map<UUID, Device> devices;
+    private final DeviceFactory computerFactory;
+    private final DeviceFactory fridgeFactory;
+    private final DeviceFactory multimediaFactory;
+    private final DeviceFactory stoveFactory;
+    private final DeviceApi deviceApi;
+    private final SimpleKafkaProducer producer;
+    private final DeviceIndexer indexer;
+    private final Cache<UUID, Device> deviceCache;
 
-    private final Cache<UUID, Device> deviceCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(10, TimeUnit.MINUTES)
-            .maximumSize(100)
-            .build();
-
-
-    public DeviceService( ) {
-
+    public DeviceService(
+            DeviceFactory computerFactory,
+            DeviceFactory fridgeFactory,
+            DeviceFactory multimediaFactory,
+            DeviceFactory stoveFactory,
+            DeviceApi deviceApi,
+            SimpleKafkaProducer producer,
+            DeviceIndexer indexer,
+            Cache<UUID, Device> deviceCache,
+            DeviceRepository deviceRepository
+    ) {
+        this.computerFactory = computerFactory;
+        this.fridgeFactory = fridgeFactory;
+        this.multimediaFactory = multimediaFactory;
+        this.stoveFactory = stoveFactory;
+        this.deviceApi = deviceApi;
+        this.producer = producer;
+        this.indexer = indexer;
+        this.deviceCache = deviceCache;
+        this.devices = deviceRepository.getDevices();
     }
 
     public Device createDevice(String name, double power, String type, UUID roomId) {
-
-        Device device;
-
-        switch (type.toLowerCase()) {
-            case "computer" -> device = computerFactory.createDevice(power, name);
-            case "fridge" -> device = fridgeFactory.createDevice(power, name);
-            case "tv" -> device = multimediaFactory.createDevice(power, name);
-            case "stove" -> device = stoveFactory.createDevice(power, name);
+        Device device = switch (type.toLowerCase()) {
+            case "computer" -> computerFactory.createDevice(power, name);
+            case "fridge" -> fridgeFactory.createDevice(power, name);
+            case "tv" -> multimediaFactory.createDevice(power, name);
+            case "stove" -> stoveFactory.createDevice(power, name);
             default -> throw new IllegalArgumentException("Imposter device: " + type);
-        }
+        };
+
         DeviceEventDTO event = new DeviceEventDTO(
                 device.getId(),
                 device.getName(),
@@ -53,9 +66,6 @@ public class DeviceService {
                 roomId
         );
         producer.sendDeviceEvent(event);
-
-
-
         devices.put(device.getId(), device);
         return device;
     }
@@ -71,7 +81,7 @@ public class DeviceService {
             deviceApi.setAction(new TurnOnDeviceAction(device));
             deviceApi.executeAction();
         } else {
-            System.err.println("Device not found: " + id);
+            logger.warn("Device not found: {}", id);
         }
     }
 
@@ -81,7 +91,7 @@ public class DeviceService {
             deviceApi.setAction(new TurnOffDeviceAction(device));
             deviceApi.executeAction();
         } else {
-            System.err.println("Device not found: " + id);
+            logger.warn("Device not found: {}", id);
         }
     }
 
@@ -93,7 +103,7 @@ public class DeviceService {
             deviceApi.setAction(new IncreaseVolumeAction((TV) device, step));
             deviceApi.executeAction();
         } else {
-            System.err.println("This device do not have this function: " + id);
+            logger.warn("This device does not support volume control: {}", id);
         }
     }
 
@@ -103,7 +113,7 @@ public class DeviceService {
             deviceApi.setAction(new DecreaseVolumeAction((TV) device, step));
             deviceApi.executeAction();
         } else {
-            System.err.println("This device do not have this function: " + id);
+            logger.warn("This device does not support volume control: {}", id);
         }
     }
 
@@ -114,14 +124,14 @@ public class DeviceService {
             deviceApi.setAction(new LoadProductAction((Fridge) device, product));
             deviceApi.executeAction();
         } else {
-            System.err.println("Can't load product to this device: " + id);
+            logger.warn("Can't load product to this device: {}", id);
         }
     }
 
     public Device getDeviceById(UUID id) {
         Device cached = deviceCache.getIfPresent(id);
         if (cached != null) {
-            //System.out.println("[CACHE HIT] Device " + id);
+//            logger.info("[CACHE HIT] Device {}", id);
             return cached;
         }
 
@@ -129,7 +139,7 @@ public class DeviceService {
         if (device != null) {
             deviceCache.put(id, device);
             indexer.index(device);
-            //System.out.println("[CACHE PUT] Device " + id);
+            //logger.info("[CACHE PUT] Device {}" + id);
         }
         return device;
     }
