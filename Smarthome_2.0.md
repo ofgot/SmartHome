@@ -63,10 +63,11 @@ Kafka:
 ![image](https://github.com/user-attachments/assets/d4f2839b-65fd-4be4-80fd-01750893edb5)
 
 ###  Use Case Diagram  
-![image](https://github.com/user-attachments/assets/58ee45bc-cba9-420c-87c2-370125302459)
+![image](https://github.com/user-attachments/assets/876e6d36-a984-4523-8246-21588ce755b0)
 
 ### Component Diagram
-![image](https://github.com/user-attachments/assets/473ef861-53fd-47d6-a7c4-d685548e6afb)
+![image](https://github.com/user-attachments/assets/4d3311f3-f06b-4865-8986-1b4fb9458f22)
 
 ### Sequence Diagram
-![image](https://github.com/user-attachments/assets/d3a2c2aa-607d-4969-ab78-368ce50ea537)
+![image](https://github.com/user-attachments/assets/d06d3912-944f-422d-bdeb-517598a02d5d)
+
