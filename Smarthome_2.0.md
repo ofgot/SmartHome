@@ -56,11 +56,10 @@ Kafka:
  - Zajišťuje komunikaci a předávání událostí mezi službami (například vytvoření nového zařízení a jeho přidání do místnosti).
 
 ## Diagrams
-###  Concept Diagram  
-![image](https://github.com/user-attachments/assets/ec6548fd-721a-439c-aeac-2e6b30811ba6)
+###  Concept Diagram  ![image](https://github.com/user-attachments/assets/98093ac5-ec62-4d35-81fc-241fc0c52dd7)
 
 ###  Class Diagram  
-![image](https://github.com/user-attachments/assets/d4f2839b-65fd-4be4-80fd-01750893edb5)
+
 
 ###  Use Case Diagram  
 ![image](https://github.com/user-attachments/assets/876e6d36-a984-4523-8246-21588ce755b0)
