@@ -59,7 +59,7 @@ Kafka:
 ###  Concept Diagram  ![image](https://github.com/user-attachments/assets/98093ac5-ec62-4d35-81fc-241fc0c52dd7)
 
 ###  Class Diagram  
-
+![diagram drawio](https://github.com/user-attachments/assets/985a8d8a-4d33-487a-8bab-eea4dfe343c7)
 
 ###  Use Case Diagram  
 ![image](https://github.com/user-attachments/assets/876e6d36-a984-4523-8246-21588ce755b0)
