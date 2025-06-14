@@ -1,5 +1,9 @@
 package sir.smarthome.device_service.commands;
 
+/**
+ * Base class for command pattern implementations.
+ * Provides common functionality for command receivers.
+ */
 public abstract class BaseAction<R> implements Command {
     protected R receiver;
 

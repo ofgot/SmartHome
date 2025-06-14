@@ -1,8 +1,4 @@
 package sir.smarthome.house_service.model;
-
-import sir.smarthome.common.Equipment;
-import sir.smarthome.device_service.devices.Device;
-
 import java.util.*;
 
 public class Room  {
@@ -50,4 +46,11 @@ public class Room  {
         devices.remove(deviceId);
     }
 
+    public Object getBuildingId() {
+        return buildingId;
+    }
+
+    public Object getFloorNumber() {
+        return floorNumber;
+    }
 }

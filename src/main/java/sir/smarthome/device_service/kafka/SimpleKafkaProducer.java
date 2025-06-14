@@ -9,6 +9,10 @@ import sir.smarthome.common.DeviceEventDTO;
 
 import java.util.Properties;
 
+/**
+ * Kafka producer for sending device events.
+ * Handles JSON serialization and message publishing.
+ */
 public class SimpleKafkaProducer {
 
     private final KafkaProducer<String, String> producer;
@@ -24,6 +28,10 @@ public class SimpleKafkaProducer {
         this.objectMapper = new ObjectMapper();
     }
 
+    /**
+     * Sends device event to Kafka topic
+     * @param event Device event data to publish
+     */
     public void sendDeviceEvent(DeviceEventDTO event) {
         try {
             String json = objectMapper.writeValueAsString(event);
@@ -35,6 +43,9 @@ public class SimpleKafkaProducer {
         }
     }
 
+    /**
+     * Closes Kafka producer resources
+     */
     public void close() {
         producer.close();
     }

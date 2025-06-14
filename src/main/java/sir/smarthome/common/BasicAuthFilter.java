@@ -9,6 +9,10 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * HTTP handler that implements Basic Authentication.
+ * Validates credentials before passing requests to the next handler.
+ */
 public class BasicAuthFilter implements HttpHandler {
     private final HttpHandler next;
     private final String validUser = "admin";
@@ -18,6 +22,11 @@ public class BasicAuthFilter implements HttpHandler {
         this.next = next;
     }
 
+    /**
+     * Validates Basic Auth credentials against stored values
+     * @param exchange HTTP exchange containing auth headers
+     * @throws IOException if I/O error occurs during response
+     */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         Map<String, List<String>> headers = exchange.getRequestHeaders();

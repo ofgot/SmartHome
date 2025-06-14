@@ -9,15 +9,21 @@ import sir.smarthome.house_service.model.Room;
 import sir.smarthome.notification_service.EmailNotifier;
 import sir.smarthome.notification_service.NotificationService;
 import sir.smarthome.notification_service.SmsNotifier;
+import sir.smarthome.rest.HouseRestApi;
 
+import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public class SmartHomeApp {
+
+/**
+ * Main application class for SmartHome system.
+ * Initializes building structure and services.
+ */public class SmartHomeApp {
     private static final Logger logger = Logger.getLogger(SmartHomeApp.class.getName());
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         System.out.println("🚀 SmartHomeApp started");
 
         HouseServiceImpl houseService = new HouseServiceImpl();
@@ -26,25 +32,28 @@ public class SmartHomeApp {
         notificationService.registerObserver(new SmsNotifier());
 
         UUID buildingId = UUID.randomUUID();
-        UUID roomId = UUID.randomUUID();
-        int floorNumber = 1;
+        Building building = new Building(buildingId, "Main Smart Home");
 
-        Building b = new Building(buildingId, "Main Building");
-        Floor f = new Floor("Floor", floorNumber);
-        Room r = new Room(roomId, "Living Room", buildingId, floorNumber);
-        f.addRoom(r);
-        b.addFloor(f);
+        for (int floorNumber = 1; floorNumber <= 2; floorNumber++) {
+            Floor floor = new Floor("Floor " + floorNumber, floorNumber);
 
-        houseService.createBuilding(b);
+            for (int i = 1; i <= 3; i++) {
+                UUID roomId = UUID.randomUUID();
+                Room room = new Room(roomId, "Room " + i + "F" + floorNumber, buildingId, floorNumber);
+                floor.addRoom(room);
+                logger.info(String.format("Created room %s on floor %d", roomId, floorNumber));
+            }
 
-        LoggingInterceptor.log("SmartHomeApp", "Created building " + buildingId);
-        LoggingInterceptor.log("SmartHomeApp", "Created room " + roomId);
+            building.addFloor(floor);
+            logger.info(String.format("Added floor %d to building %s", floorNumber, buildingId));
+        }
 
-        // запускаем consumer — передаём ему существующий houseService
+        houseService.createBuilding(building);
+        logger.info("Created building " + buildingId);
+
         new Thread(new DeviceEventConsumer(houseService, notificationService)).start();
-        //notificationService.onKafkaMessage("device-added", "Fridge Samsung added");
-
-        // Необязательная задержка, чтобы приложение не завершалось сразу
+        HouseRestApi houseApi = new HouseRestApi(houseService);
+        houseApi.start();
         Thread.sleep(10000);
     }
 }

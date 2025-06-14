@@ -35,4 +35,7 @@ public class Floor  {
                         new NoSuchElementException("No room " + roomId + " on floor " + floorNumber));
     }
 
+    public int getNumber() {
+        return floorNumber;
+    }
 }
