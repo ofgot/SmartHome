@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * REST API for managing house structure (buildings, floors, rooms).
+ * Exposes endpoints for retrieving house hierarchy and room information.
+ */
 public class HouseRestApi {
     private final HouseService houseService;
 
@@ -22,10 +26,16 @@ public class HouseRestApi {
         this.houseService = houseService;
     }
 
+    /**
+     * Starts the HTTP server on port 8090 and configures endpoints:
+     * - GET /house - Full house structure with buildings/floors/rooms
+     * - GET /rooms - List of all rooms
+     * - GET /room?id={uuid} - Single room details
+     * @throws IOException if server fails to start
+     */
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8090), 0);
 
-        // GET /house
         server.createContext("/house", exchange -> {
             if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
@@ -54,7 +64,6 @@ public class HouseRestApi {
             sendResponse(exchange, 200, sb.toString());
         });
 
-        // GET /rooms
         server.createContext("/rooms", exchange -> {
             if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
@@ -77,8 +86,6 @@ public class HouseRestApi {
             sendResponse(exchange, 200, json);
         });
 
-
-        // GET /room?id=...
         server.createContext("/room", exchange -> {
             if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
@@ -116,6 +123,13 @@ public class HouseRestApi {
         System.out.println("House REST API started at http://localhost:8090");
     }
 
+    /**
+     * Helper method to send HTTP responses
+     * @param exchange HTTP exchange object
+     * @param statusCode HTTP status code
+     * @param response Response body content
+     * @throws IOException if I/O error occurs
+     */
     private void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
         exchange.sendResponseHeaders(statusCode, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();

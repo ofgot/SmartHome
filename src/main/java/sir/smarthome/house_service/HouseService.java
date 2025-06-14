@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-// operations
-public interface HouseService {
-    // For house
+/**
+ * Service interface for house operations.
+ * Defines building and room management operations.
+ */public interface HouseService {
     Building createBuilding(Building b);
     Building getBuildingById(UUID buildingId) throws NoSuchElementException;
     List<Building> listBuildings();

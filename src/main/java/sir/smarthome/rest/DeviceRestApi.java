@@ -12,6 +12,11 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.UUID;
 
+/**
+ * REST API controller for smart home device management.
+ * Provides endpoints for retrieving device information and status.
+ * All endpoints except /status require Basic Authentication.
+ */
 public class DeviceRestApi {
     private final DeviceService service;
 
@@ -19,15 +24,19 @@ public class DeviceRestApi {
         this.service = service;
     }
 
+    /**
+     * Starts the HTTP server on port 8080 and registers endpoints:
+     * GET /status - Service health check
+     * GET /devices - List all devices (authenticated)
+     * GET /device?id={uuid} - Get specific device (authenticated)
+     * @throws IOException if the HTTP server fails to start
+     */
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-
-        // /status
         server.createContext("/status", exchange -> {
             sendResponse(exchange, 200, "SmartHome API is running");
         });
 
-        // /devices
         server.createContext("/devices", new BasicAuthFilter(exchange -> {
             if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
                 sendResponse(exchange, 405, "Method Not Allowed");
@@ -41,13 +50,12 @@ public class DeviceRestApi {
                 response.append(String.format("  { \"id\": \"%s\", \"name\": \"%s\", \"type\": \"%s\" },\n",
                         d.getId(), d.getName(), d.getClass().getSimpleName()));
             }
-            if (response.length() > 2) response.setLength(response.length() - 2); // убираем запятую
+            if (response.length() > 2) response.setLength(response.length() - 2);
             response.append("\n]");
 
             sendResponse(exchange, 200, response.toString());
         }));
 
-        // /devices/{id}
         server.createContext("/device", new BasicAuthFilter(new HttpHandler() {
             @Override
             public void handle(HttpExchange exchange) throws IOException {
@@ -84,6 +92,13 @@ public class DeviceRestApi {
         System.out.println("REST API started on http://localhost:8080");
     }
 
+    /**
+     * Sends HTTP response with given status and body
+     * @param exchange HTTP exchange object
+     * @param statusCode HTTP status code
+     * @param response Response body content
+     * @throws IOException if I/O error occurs
+     */
     private void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
         exchange.sendResponseHeaders(statusCode, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();

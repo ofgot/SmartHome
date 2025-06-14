@@ -3,6 +3,14 @@ package sir.smarthome.common;
 import java.util.UUID;
 
 public class DeviceEventDTO {
+    /**
+     * Constructs new device event with all parameters
+     * @param id Unique device identifier
+     * @param name Device name
+     * @param type Device type
+     * @param status Device status
+     * @param roomId Identifier of containing room
+     */
     private UUID id;
     private String name;
     private String type;

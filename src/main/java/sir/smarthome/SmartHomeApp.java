@@ -15,7 +15,11 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public class SmartHomeApp {
+
+/**
+ * Main application class for SmartHome system.
+ * Initializes building structure and services.
+ */public class SmartHomeApp {
     private static final Logger logger = Logger.getLogger(SmartHomeApp.class.getName());
 
 

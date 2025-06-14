@@ -24,6 +24,10 @@ import sir.smarthome.device_service.kafka.SimpleKafkaProducer;
 import sir.smarthome.elasticsearch.DeviceIndexer;
 
 
+/**
+ * Main application class for Device Service.
+ * Provides interface for device management.
+ */
 public class DeviceServiceApp {
 
     public static void main(String[] args) throws IOException {

@@ -12,6 +12,10 @@ import org.elasticsearch.client.RestClient;
 
 import java.io.IOException;
 
+/**
+ * Service for Elasticsearch operations.
+ * Manages index creation and document indexing.
+ */
 public class ElasticService {
 
     private final ElasticsearchClient client;
@@ -22,6 +26,11 @@ public class ElasticService {
         this.client = new ElasticsearchClient(transport);
     }
 
+    /**
+     * Creates new index if it doesn't exist
+     * @param indexName Name of index to create
+     * @throws IOException if Elasticsearch communication fails
+     */
     public void createIndexIfNotExists(String indexName) throws IOException {
         boolean exists = client.indices().exists(b -> b.index(indexName)).value();
         if (!exists) {

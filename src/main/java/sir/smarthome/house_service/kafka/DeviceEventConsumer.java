@@ -17,6 +17,10 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.UUID;
 
+/**
+ * Kafka consumer for processing device events.
+ * Updates room-device associations and triggers notifications.
+ */
 public class DeviceEventConsumer implements Runnable {
 
     private final KafkaConsumer<String, String> consumer;

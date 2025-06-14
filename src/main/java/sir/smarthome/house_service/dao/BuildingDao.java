@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-// to get building to later get floors and rooms from it
+/**
+ * Data Access Object interface for building operations.
+ * Defines CRUD operations for building entities.
+ */
 public interface BuildingDao {
     Optional<Building> findBuildingById(UUID buildingId);
     void saveBuilding(Building b);

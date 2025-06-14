@@ -14,6 +14,10 @@ import sir.smarthome.elasticsearch.DeviceIndexer;
 
 import java.util.*;
 
+/**
+ * Core service for managing smart home devices.
+ * Handles device creation, operations, and caching.
+ */
 public class DeviceService {
     private static final Logger logger = LoggerFactory.getLogger(DeviceService.class);
 
@@ -74,7 +78,6 @@ public class DeviceService {
         return devices;
     }
 
-    // Common commands
     public void turnOnDevice(UUID id) {
         Device device = getDeviceById(id);
         if (device != null) {
@@ -95,8 +98,6 @@ public class DeviceService {
         }
     }
 
-
-    // TV command
     public void increaseVolume(UUID id, int step) {
         Device device = getDeviceById(id);
         if (device instanceof TV) {
@@ -117,7 +118,6 @@ public class DeviceService {
         }
     }
 
-    // Fridge command
     public void loadFridge(UUID id, Product product) {
         Device device = getDeviceById(id);
         if (device instanceof Fridge) {
@@ -131,7 +131,6 @@ public class DeviceService {
     public Device getDeviceById(UUID id) {
         Device cached = deviceCache.getIfPresent(id);
         if (cached != null) {
-//            logger.info("[CACHE HIT] Device {}", id);
             return cached;
         }
 
@@ -139,7 +138,6 @@ public class DeviceService {
         if (device != null) {
             deviceCache.put(id, device);
             indexer.index(device);
-            //logger.info("[CACHE PUT] Device {}" + id);
         }
         return device;
     }
