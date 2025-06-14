@@ -60,6 +60,12 @@ Nakonec spustit DeviceServiceApp (nabízí CLI pro správu zařízení).
 
 Každá aplikace by měla běžet v samostatné konzoli, což umožňuje přehledné sledování výstupů a logů.
 
+## BasicAuth credentials
+username: admin
+
+heslo: admin123
+
+
 ## Ovládání a ověření systému
 Zařízení lze vytvářet v DeviceServiceApp pomocí příkazu, například:
 
