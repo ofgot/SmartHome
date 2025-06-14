@@ -36,6 +36,23 @@ Doporučený postup spuštění služeb:
 Nejprve spustit Kafka/Elasticsearch prostřednictvím Dockeru.
 
 Poté spustit SmartHomeApp (zajišťuje vytvoření základní struktury domu a spuštění Kafka consumeru).
+Při spuštění SmartHomeApp se automaticky vytvoří základní struktura domu:
+
+- 1 budova s názvem "Main Smart Home"
+
+- 2 patra (Floor 1 a Floor 2)
+
+- Celkem 6 místností (3 na každém patře)
+
+! ID místností jsou generována automaticky při každém spuštění SmartHomeApp. Pokud aplikaci restartujete, budou vytvořena nová ID.
+
+Tuto strukturu můžete zobrazit pomocí následujících API endpointů:
+
+http://localhost:8090/house
+
+http://localhost:8090/rooms
+
+http://localhost:8090/room?id=<roomId>
 
 Následně spustit NotificationApp (poslouchá události z Kafka a rozesílá notifikace).
 
@@ -51,11 +68,11 @@ Zařízení lze vytvářet v DeviceServiceApp pomocí příkazu, například:
 
 Správné spuštění lze ověřit prostřednictvím dostupných API endpointů:
 
-http://localhost:9200/status
+http://localhost:8080/status
 
-http://localhost:9200/devices
+http://localhost:8080/devices
 
-http://localhost:9200/device?id=<uuid>
+http://localhost:8080/device?id=<uuid>
 
 ## Doporučení
 Služby spouštět ve výše uvedeném pořadí:
