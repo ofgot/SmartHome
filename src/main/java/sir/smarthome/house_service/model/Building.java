@@ -26,7 +26,7 @@ public class Building  {
         floors.removeIf(f -> f.getFloorNumber() == floorNumber);
     }
 
-    public Floor findFloor(int floorNumber) {
+    public Floor getFloorByNumber(int floorNumber) {
         return floors.stream()
                 .filter(f -> f.getFloorNumber() == floorNumber)
                 .findFirst()

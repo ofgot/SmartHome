@@ -33,79 +33,8 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public Building updateBuilding(UUID buildingId, Building updatedBuilding) {
-        Building existing = getBuildingById(buildingId);
-        dao.saveBuilding(updatedBuilding);
-        return updatedBuilding;
-    }
-
-    @Override
-    public void deleteBuilding(UUID buildingId) {
-        dao.deleteBuilding(buildingId);
-    }
-
-    @Override
     public List<Building> listBuildings() {
         return dao.findAll();
-    }
-
-    @Override
-    public Floor addFloor(UUID buildingId, Floor f) {
-        Building b = getBuildingById(buildingId);
-        b.addFloor(f);
-        dao.saveBuilding(b);
-        return f;
-    }
-
-    @Override
-    public Floor getFloor(UUID buildingId, int floorNumber) {
-        Building b = getBuildingById(buildingId);
-        return b.findFloor(floorNumber);
-    }
-
-    @Override
-    public void deleteFloor(UUID buildingId, int floorNumber) {
-        Building b = getBuildingById(buildingId);
-        b.removeFloor(floorNumber);
-        dao.saveBuilding(b);
-    }
-
-    @Override
-    public List<Floor> getAllFloors(UUID buildingId) {
-        return new ArrayList<>( getBuildingById(buildingId).getFloors() );
-    }
-
-    @Override
-    public Room addRoom(UUID buildingId, int floorNumber, Room r) {
-        Building b = getBuildingById(buildingId);
-        Floor f = b.findFloor(floorNumber);
-        f.addRoom(r);
-        dao.saveBuilding(b);
-        return r;
-    }
-
-    @Override
-    public Room getRoom(UUID buildingId, int floorNumber, UUID roomId) {
-        Building b = getBuildingById(buildingId);
-        return b.findFloor(floorNumber)
-                .findRoom(roomId);
-    }
-
-    @Override
-    public void deleteRoom(UUID buildingId, int floorNumber, UUID roomId) {
-        Building b = getBuildingById(buildingId);
-        Floor f = b.findFloor(floorNumber);
-        f.removeRoom(roomId);
-        dao.saveBuilding(b);
-    }
-
-    @Override
-    public List<Room> listRooms(UUID buildingId, int floorNumber) {
-        return new ArrayList<>(
-                getBuildingById(buildingId)
-                        .findFloor(floorNumber)
-                        .getRooms()
-        );
     }
 
     @Override
@@ -119,7 +48,6 @@ public class HouseServiceImpl implements HouseService {
     public Room getRoomById(UUID roomId) {
         Room cached = roomCache.getIfPresent(roomId);
         if (cached != null) {
-            //System.out.println("💾 [CACHE HIT] Room " + roomId);
             return cached;
         }
 
@@ -128,7 +56,6 @@ public class HouseServiceImpl implements HouseService {
                 for (Room r : f.getRooms()) {
                     if (r.getId().equals(roomId)) {
                         roomCache.put(roomId, r);
-                        //System.out.println("📥 [CACHE PUT] Room " + roomId);
                         return r;
                     }
                 }
@@ -137,6 +64,5 @@ public class HouseServiceImpl implements HouseService {
 
         throw new NoSuchElementException("Room with id " + roomId + " not found");
     }
-
 
 }

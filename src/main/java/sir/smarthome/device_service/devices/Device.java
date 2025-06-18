@@ -3,6 +3,10 @@ package sir.smarthome.device_service.devices;
 import java.util.*;
 
 public abstract class Device {
+    /**
+     * Abstract base class for all smart home devices.
+     * Contains common device properties and behaviors.
+     */
     protected UUID id;
     protected String name;
     protected double powerConsumption;
