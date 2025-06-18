@@ -6,12 +6,6 @@ public class DeviceApi {
     private static final Logger logger = Logger.getLogger(DeviceApi.class.getName());
     private Command action;
 
-//    private final ReportGenerator reportGenerator;
-
-//    public DeviceApi(ReportGenerator generator) {
-//        this.reportGenerator = generator;
-//    }
-
     public DeviceApi() {}
 
     public void setAction(Command action) {
