@@ -5,7 +5,10 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sir.smarthome.common.DeviceEventDTO;
+import sir.smarthome.device_service.DeviceServiceApp;
 
 import java.util.Properties;
 
@@ -14,6 +17,7 @@ import java.util.Properties;
  * Handles JSON serialization and message publishing.
  */
 public class SimpleKafkaProducer {
+    private static final Logger logger = LoggerFactory.getLogger(SimpleKafkaProducer.class);
 
     private final KafkaProducer<String, String> producer;
     private final ObjectMapper objectMapper;
@@ -37,7 +41,7 @@ public class SimpleKafkaProducer {
             String json = objectMapper.writeValueAsString(event);
             ProducerRecord<String, String> record = new ProducerRecord<>("device-events", json);
             producer.send(record);
-            System.out.println("[Kafka] Sent: " + json);
+            logger.info("[Kafka] Sent: " + json);
         } catch (Exception e) {
             e.printStackTrace();
         }

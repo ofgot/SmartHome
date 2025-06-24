@@ -1,5 +1,8 @@
 package sir.smarthome.rest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sir.smarthome.common.BasicAuthFilter;
+import sir.smarthome.device_service.DeviceServiceApp;
 import sir.smarthome.house_service.HouseService;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
@@ -20,6 +23,9 @@ import java.util.stream.Collectors;
  * Exposes endpoints for retrieving house hierarchy and room information.
  */
 public class HouseRestApi {
+
+    private static final Logger logger = LoggerFactory.getLogger(HouseRestApi.class);
+
     private final HouseService houseService;
 
     public HouseRestApi(HouseService houseService) {
@@ -120,7 +126,7 @@ public class HouseRestApi {
 
         server.setExecutor(null);
         server.start();
-        System.out.println("House REST API started at http://localhost:8090");
+        logger.info("House REST API started at http://localhost:8090");
     }
 
     /**

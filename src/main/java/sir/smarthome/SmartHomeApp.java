@@ -22,9 +22,8 @@ import java.util.logging.Logger;
  */public class SmartHomeApp {
     private static final Logger logger = Logger.getLogger(SmartHomeApp.class.getName());
 
-
     public static void main(String[] args) throws InterruptedException, IOException {
-        System.out.println("🚀 SmartHomeApp started");
+        logger.info("🚀 SmartHomeApp started");
 
         HouseServiceImpl houseService = new HouseServiceImpl();
         NotificationService notificationService = new NotificationService();

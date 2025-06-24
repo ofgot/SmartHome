@@ -8,7 +8,6 @@ import sir.smarthome.common.DeviceEventDTO;
 import sir.smarthome.common.Product;
 import sir.smarthome.device_service.commands.*;
 import sir.smarthome.device_service.devices.*;
-import sir.smarthome.device_service.factories.*;
 import sir.smarthome.device_service.kafka.SimpleKafkaProducer;
 import sir.smarthome.elasticsearch.DeviceIndexer;
 
@@ -16,52 +15,52 @@ import java.util.*;
 
 /**
  * Core service for managing smart home devices.
- * Handles device creation, operations, and caching.
+ * Handles device registration, operations (on/off, volume, etc.),
+ * caching, indexing, and event publishing.
+ *
+ * This class does not create devices directly, but registers already created ones
+ * and allows interaction with them via predefined actions.
  */
 public class DeviceService {
     private static final Logger logger = LoggerFactory.getLogger(DeviceService.class);
 
     private final Map<UUID, Device> devices;
-    private final DeviceFactory computerFactory;
-    private final DeviceFactory fridgeFactory;
-    private final DeviceFactory multimediaFactory;
-    private final DeviceFactory stoveFactory;
     private final DeviceApi deviceApi;
     private final SimpleKafkaProducer producer;
     private final DeviceIndexer indexer;
     private final Cache<UUID, Device> deviceCache;
 
+    /**
+     * Constructs a {@code DeviceService} with the necessary dependencies.
+     *
+     * @param deviceApi        API used to execute actions on devices
+     * @param producer         Kafka producer for sending device events
+     * @param indexer          Service for indexing devices (e.g., in Elasticsearch)
+     * @param deviceCache      Cache for fast device lookup
+     * @param deviceRepository Repository providing the initial device map
+     */
     public DeviceService(
-            DeviceFactory computerFactory,
-            DeviceFactory fridgeFactory,
-            DeviceFactory multimediaFactory,
-            DeviceFactory stoveFactory,
             DeviceApi deviceApi,
             SimpleKafkaProducer producer,
             DeviceIndexer indexer,
             Cache<UUID, Device> deviceCache,
             DeviceRepository deviceRepository
     ) {
-        this.computerFactory = computerFactory;
-        this.fridgeFactory = fridgeFactory;
-        this.multimediaFactory = multimediaFactory;
-        this.stoveFactory = stoveFactory;
-        this.deviceApi = deviceApi;
-        this.producer = producer;
-        this.indexer = indexer;
+        this.deviceApi   = deviceApi;
+        this.producer    = producer;
+        this.indexer     = indexer;
         this.deviceCache = deviceCache;
-        this.devices = deviceRepository.getDevices();
+        this.devices     = deviceRepository.getDevices();
     }
 
-    public Device createDevice(String name, double power, String type, UUID roomId) {
-        Device device = switch (type.toLowerCase()) {
-            case "computer" -> computerFactory.createDevice(power, name);
-            case "fridge" -> fridgeFactory.createDevice(power, name);
-            case "tv" -> multimediaFactory.createDevice(power, name);
-            case "stove" -> stoveFactory.createDevice(power, name);
-            default -> throw new IllegalArgumentException("Imposter device: " + type);
-        };
-
+    /**
+     * Registers a new device into the system, sends a creation event,
+     * and stores it in the internal device map.
+     *
+     * @param device the newly created device
+     * @param roomId the ID of the room the device belongs to
+     */
+    public void registerDevice(Device device, UUID roomId) {
         DeviceEventDTO event = new DeviceEventDTO(
                 device.getId(),
                 device.getName(),
@@ -71,13 +70,22 @@ public class DeviceService {
         );
         producer.sendDeviceEvent(event);
         devices.put(device.getId(), device);
-        return device;
     }
 
+    /**
+     * Returns the map of all managed devices.
+     *
+     * @return a map of devices keyed by their UUID
+     */
     public Map<UUID, Device> getDevices() {
         return devices;
     }
 
+    /**
+     * Turns on a device by its ID, if found.
+     *
+     * @param id the UUID of the device
+     */
     public void turnOnDevice(UUID id) {
         Device device = getDeviceById(id);
         if (device != null) {
@@ -88,6 +96,11 @@ public class DeviceService {
         }
     }
 
+    /**
+     * Turns off a device by its ID, if found.
+     *
+     * @param id the UUID of the device
+     */
     public void turnOffDevice(UUID id) {
         Device device = getDeviceById(id);
         if (device != null) {
@@ -98,6 +111,12 @@ public class DeviceService {
         }
     }
 
+    /**
+     * Increases the volume of a device if it's a TV.
+     *
+     * @param id   the UUID of the device
+     * @param step the amount to increase the volume by
+     */
     public void increaseVolume(UUID id, int step) {
         Device device = getDeviceById(id);
         if (device instanceof TV) {
@@ -108,6 +127,12 @@ public class DeviceService {
         }
     }
 
+    /**
+     * Decreases the volume of a device if it's a TV.
+     *
+     * @param id   the UUID of the device
+     * @param step the amount to decrease the volume by
+     */
     public void decreaseVolume(UUID id, int step) {
         Device device = getDeviceById(id);
         if (device instanceof TV) {
@@ -118,6 +143,12 @@ public class DeviceService {
         }
     }
 
+    /**
+     * Loads a product into a device if it's a fridge.
+     *
+     * @param id      the UUID of the device
+     * @param product the product to be loaded
+     */
     public void loadFridge(UUID id, Product product) {
         Device device = getDeviceById(id);
         if (device instanceof Fridge) {
@@ -128,6 +159,13 @@ public class DeviceService {
         }
     }
 
+    /**
+     * Retrieves a device by its ID, checking the cache first.
+     * If not cached, fetches from internal storage and caches it.
+     *
+     * @param id the UUID of the device
+     * @return the corresponding device, or {@code null} if not found
+     */
     public Device getDeviceById(UUID id) {
         Device cached = deviceCache.getIfPresent(id);
         if (cached != null) {
@@ -142,7 +180,11 @@ public class DeviceService {
         return device;
     }
 
-
+    /**
+     * Returns the Kafka producer used to publish device events.
+     *
+     * @return the Kafka producer instance
+     */
     public SimpleKafkaProducer getProducer() {
         return producer;
     }

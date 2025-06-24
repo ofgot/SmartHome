@@ -3,7 +3,10 @@ package sir.smarthome.rest;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sir.smarthome.common.BasicAuthFilter;
+import sir.smarthome.device_service.DeviceServiceApp;
 import sir.smarthome.device_service.service.DeviceService;
 import sir.smarthome.device_service.devices.Device;
 
@@ -18,6 +21,9 @@ import java.util.UUID;
  * All endpoints except /status require Basic Authentication.
  */
 public class DeviceRestApi {
+
+    private static final Logger logger = LoggerFactory.getLogger(DeviceRestApi.class);
+
     private final DeviceService service;
 
     public DeviceRestApi(DeviceService service) {
@@ -89,7 +95,7 @@ public class DeviceRestApi {
 
         server.setExecutor(null);
         server.start();
-        System.out.println("REST API started on http://localhost:8080");
+        logger.info("REST API started on http://localhost:8080");
     }
 
     /**

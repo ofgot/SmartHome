@@ -9,6 +9,8 @@ import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -17,6 +19,8 @@ import java.io.IOException;
  * Manages index creation and document indexing.
  */
 public class ElasticService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ElasticService.class);
 
     private final ElasticsearchClient client;
 
@@ -45,7 +49,7 @@ public class ElasticService {
                             ))
                     )
             );
-            System.out.println("📦 Created index: " + response.index());
+            logger.info("Created index: " + response.index());
         }
     }
 

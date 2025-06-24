@@ -2,8 +2,12 @@ package sir.smarthome.device_service;
 
 import co.elastic.clients.elasticsearch.core.IndexRequest;
 import com.google.common.cache.CacheBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sir.smarthome.common.LoggingInterceptor;
 import sir.smarthome.common.Product;
+import sir.smarthome.device_service.builder.DeviceCreator;
+import sir.smarthome.device_service.devices.DeviceType;
 import sir.smarthome.device_service.factories.ComputerFactory;
 import sir.smarthome.device_service.factories.DeviceFactory;
 import sir.smarthome.device_service.service.DeviceService;
@@ -30,44 +34,51 @@ import sir.smarthome.elasticsearch.DeviceIndexer;
  */
 public class DeviceServiceApp {
 
+    private static final Logger logger = LoggerFactory.getLogger(DeviceServiceApp.class);
+
     public static void main(String[] args) throws IOException {
 
-        System.out.println("=== SmartHome Device Service ===");
+        logger.info("=== SmartHome Device Service ===");
+
         DeviceFactory computerFactory = ComputerFactory.getInstance();
         DeviceFactory fridgeFactory = FridgeFactory.getInstance();
         DeviceFactory multimediaFactory = MultimediaFactory.getInstance();
         DeviceFactory stoveFactory = StoveFactory.getInstance();
+
+        DeviceCreator deviceCreator = new DeviceCreator(
+                computerFactory,
+                fridgeFactory,
+                multimediaFactory,
+                stoveFactory
+        );
+
         DeviceApi deviceApi = new DeviceApi();
         SimpleKafkaProducer producer = new SimpleKafkaProducer();
         DeviceIndexer indexer = new DeviceIndexer();
-        DeviceRepository deviceRepository = new DeviceRepository();
+        DeviceRepository repository = new DeviceRepository();
         Cache<UUID, Device> cache = CacheBuilder.newBuilder()
                 .expireAfterWrite(10, TimeUnit.MINUTES)
                 .maximumSize(100)
                 .build();
 
         DeviceService service = new DeviceService(
-                computerFactory,
-                fridgeFactory,
-                multimediaFactory,
-                stoveFactory,
                 deviceApi,
                 producer,
                 indexer,
                 cache,
-                deviceRepository
+                repository
         );
+
         ElasticService elasticService = new ElasticService();
         elasticService.createIndexIfNotExists("devices");
 
         try {
             new DeviceRestApi(service).start();
         } catch (IOException e) {
-            System.err.println("Failed to start REST API: " + e.getMessage());
+            logger.error("Failed to start REST API: {}", e.getMessage());
         }
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("=== SmartHome Device Service ===");
 
         while (true) {
             System.out.print("\n> ");
@@ -81,38 +92,48 @@ public class DeviceServiceApp {
                 switch (command) {
                     case "exit" -> {
                         LoggingInterceptor.log("DeviceServiceApp", "Exiting application");
-                        System.out.println("Exit...");
+                        logger.error("Exit...");
                         service.getProducer().close();
                         return;
                     }
                     case "create" -> {
-                        String type = parts[1];
+                        String typeStr = parts[1];
                         String name = parts[2];
                         double power = Double.parseDouble(parts[3]);
                         UUID roomId = UUID.fromString(parts[4]);
 
-                        LoggingInterceptor.log("DeviceServiceApp", "Creating device: " + name + " (" + type + "), power: " + power + ", roomId: " + roomId);
+                        try {
+                            DeviceType type = DeviceType.valueOf(typeStr.toUpperCase());
 
-                        Device device = service.createDevice(name, power, type, roomId);
-                        device.setRoomId(roomId);
-                        elasticService.getClient().index(IndexRequest.of(i -> i
-                                .index("devices")
-                                .id(device.getId().toString())
-                                .document(Map.of(
-                                        "name", device.getName(),
-                                        "type", device.getClass().getSimpleName(),
-                                        "status", "OFF", // если нет поля — можешь убрать
-                                        "roomId", device.getRoomId().toString()
-                                ))
-                        ));
+                            LoggingInterceptor.log("DeviceServiceApp", "Creating device: " + name + " (" + type + "), power: " + power + ", roomId: " + roomId);
 
-                        System.out.println("Created device: " + device.getId() + " (" + name + ")");
+                            Device device = deviceCreator.create(name, power, type);
+                            device.setRoomId(roomId);
+                            service.registerDevice(device, roomId);
+
+                            elasticService.getClient().index(IndexRequest.of(i -> i
+                                    .index("devices")
+                                    .id(device.getId().toString())
+                                    .document(Map.of(
+                                            "name", device.getName(),
+                                            "type", device.getClass().getSimpleName(),
+                                            "status", "OFF",
+                                            "roomId", device.getRoomId().toString()
+                                    ))
+                            ));
+
+                            logger.info("Created device: {} ({})", device.getId(), name);
+
+                        } catch (IllegalArgumentException e) {
+                            logger.warn("Unknown device type: '{}'. Valid types: COMPUTER, FRIDGE, TV, STOVE", typeStr);
+                        }
                     }
+
                     case "list" -> {
                         LoggingInterceptor.log("DeviceServiceApp", "Listing all devices");
-                        System.out.println("List of devices:");
+                        logger.info("List of devices:");
                         service.getDevices().forEach((id, device) ->
-                                System.out.println(id + " | " + device.getName() + " | " + device.getClass().getSimpleName()));
+                                logger.info("{} | {} | {}", id, device.getName(), device.getClass().getSimpleName()));
                     }
                     case "on" -> {
                         UUID id = UUID.fromString(parts[1]);
@@ -145,12 +166,12 @@ public class DeviceServiceApp {
                     }
                     default -> {
                         LoggingInterceptor.log("DeviceServiceApp", "Unknown command: " + command);
-                        System.out.println("Unknown command. Use this instead: create, list, on, off, volup, voldown, load, exit");
+                        logger.error("Unknown command. Use this instead: create, list, on, off, volup, voldown, load, exit");
                     }
                 }
             } catch (Exception e) {
                 LoggingInterceptor.log("DeviceServiceApp", "Error: " + e.getMessage());
-                System.err.println("Error: " + e.getMessage());
+                logger.error("Unexpected error: {}", e.getMessage(), e);
             }
         }
     }
